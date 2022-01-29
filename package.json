@@ -1,0 +1,40 @@
+{
+  "name": "quiz-app",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "backend": "npx nodemon server/index.mjs",
+    "seed": "node server/words/seed.mjs"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "date-fns": "^2.28.0",
+    "dotenv": "^14.2.0",
+    "express": "^4.17.2",
+    "lodash": "^4.17.21",
+    "mongoose": "^6.1.8",
+    "nodemon": "^2.0.15",
+    "password-generator": "^2.3.2",
+    "rae": "^1.0.3",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-redux": "^7.2.6",
+    "react-router-dom": "^6.2.1",
+    "redux": "^4.1.2",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-thunk": "^2.4.1",
+    "short-unique-id": "^4.4.4",
+    "socket.io": "^4.4.1",
+    "socket.io-client": "^4.4.1",
+    "tailwindcss": "^3.0.15"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.178",
+    "@types/mongoose": "^5.11.97",
+    "@vitejs/plugin-react": "^1.0.7",
+    "vite": "^2.7.2"
+  }
+}

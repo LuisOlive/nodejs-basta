@@ -1,0 +1,10 @@
+{
+  "files.exclude": {
+    "node_modules": false,
+    ".DS_Store": false,
+    "dist": false,
+    "dist-ssr": false,
+    "*.local": false,
+    ".env": false
+  }
+}
