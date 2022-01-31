@@ -14,7 +14,7 @@ const lettersR = [
 ]
 
 async function main() {
-  await fillCategory('apellidos')
+  await Promise.all[(fillCategory('empleos'), fillCategory('frutos'), fillCategory('países'))]
 
   console.log('db filled')
 }

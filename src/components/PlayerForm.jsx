@@ -13,7 +13,7 @@ export default function PlayerForm({ onChange, colors }) {
   useEffect(() => setColor({ target: { value: colors[0] } }), [colors])
 
   return (
-    <form onSubmit={emitChange} className={`bg-${color}-300 w-3/5 rounded-3xl mx-auto p-8`}>
+    <form onSubmit={emitChange} className={'' /*`bg-${color}-300 w-3/5 rounded-3xl mx-auto p-8`*/}>
       {/* 
       player name 
       */}

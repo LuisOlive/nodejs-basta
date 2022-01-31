@@ -9,8 +9,14 @@ export default function main(socket, io) {
     Room.emitPlayers(roomId)
   })
 
-  socket.on('player.triesEnter', ctx => {
-    if (Room.addPlayer({ socket, ...ctx }))
-      socket.on('disconnect', () => Room.deletePlayer(ctx.roomId, ctx.color))
+  socket.on('player.triesEnter', e => {
+    if (Room.addPlayer({ socket, ...e }))
+      socket.on('disconnect', () => Room.deletePlayer(e.roomId, e.color))
+  })
+
+  socket.on('player.wannaPlay', ({ roomId, color }) => {
+    if (Room?.rooms?.[roomId]?.players?.[color].admin) {
+      Room.gameStart(roomId)
+    }
   })
 }

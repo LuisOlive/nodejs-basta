@@ -1,4 +1,6 @@
+import filter from 'lodash/filter.js'
 import colors from '../data/colors.mjs'
+import Game from './Game.mjs'
 
 export default class Room {
   static rooms = {}
@@ -9,20 +11,43 @@ export default class Room {
     this.roomId = roomId
   }
 
+  static gameStart(roomId) {
+    Room.io.in(roomId).emit('game.start', new Game())
+  }
+
   static addPlayer(ctx) {
     const { socket } = ctx
     const validCtx = Room.validate(ctx)
-    if (!validCtx) return false
+
+    if (!validCtx) {
+      return false
+    }
 
     const { roomId, name, color } = validCtx
 
     Room.createIfNotExists()
 
-    Room.rooms[roomId].players[color] = { name, socket, score: 0 }
+    Room.rooms[roomId].players[color] = { name, socket, score: 0, admin: false }
 
     Room.emitPlayers(roomId)
 
+    // 2 player or more
+    if (Room.gameCanStart(roomId)) {
+      Room.admin(roomId).socket.emit('players.change', {
+        players: Room.playerList(roomId),
+        vacantColors: Room.getColors(roomId),
+        status: 2
+      })
+      // only one
+    } else {
+      Room.rooms[roomId].players[color].admin = true
+    }
+
     return true
+  }
+
+  static admin(roomId) {
+    return filter(Room.rooms[roomId].players, 'admin')[0]
   }
 
   static deletePlayer(roomId, color) {
@@ -37,12 +62,22 @@ export default class Room {
 
     Room.io.in(roomId).emit('players.change', {
       players: Room.playerList(roomId),
-      vacantColors: Room.getColors(roomId)
+      vacantColors: Room.getColors(roomId),
+      status: Room.getStatus(roomId)
     })
   }
 
   static getColors(roomId) {
     return colors.filter(c => !Room.rooms[roomId].players[c])
+  }
+
+  static gameCanStart(roomId) {
+    return Object.keys(Room.rooms[roomId].players).length > 1
+  }
+
+  static getStatus(roomId) {
+    if (Object.keys(Room.rooms[roomId].players).length <= 1) return 0
+    return 1
   }
 
   static validate({ roomId, name, color }) {

@@ -9,6 +9,7 @@ This code couldn't be possible without this recopilations
 - https://www.spanish.cl/vocabulario/frutas.htm
 - https://bolcereales.com.ar/alimentacion/lista-de-frutas/
 - https://frutas.consumer.es/
+- https://www.spanish.cl/vocabulario/verduras.htm
 
 And they would be a headache to format without the help of:
 
