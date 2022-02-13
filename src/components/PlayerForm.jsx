@@ -1,52 +1,43 @@
-import { useEffect } from 'react'
-import useInput from '../hooks/useInput'
+import { useCallback, useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
+
 import usePrevent from '../hooks/usePrevent'
+import { loadUserFromCacheAction, setNameAction } from '../redux/userDuck'
 
-const alphaNumericRegex = /^[a-zA-Z0-9_ñÑáéíóúÁÉÍÓÚ]+\s?[a-zA-Z0-9_ñÑáéíóúÁÉÍÓÚ]+$/
+import Button from './Button'
+import ColorPicker from './ColorPicker'
+import Input from './Input'
+import Card from './Card'
 
-export default function PlayerForm({ onChange, colors }) {
-  const [name, setName] = useInput(alphaNumericRegex)
-  const [color, setColor] = useInput()
+export default function PlayerForm() {
+  const dispatch = useDispatch()
+  const [name, setName] = useState('')
 
-  const emitChange = usePrevent(() => onChange({ name, color }), [color, name])
+  const validator = useCallback(value => {
+    if (/^\s/.test(value) || /\s$/.test(value))
+      return ['Tu nombre no puede empezar ni terminar con espacios']
 
-  useEffect(() => setColor({ target: { value: colors[0] } }), [colors])
+    if (!/^[a-z0-9ñáéíóú\s_]*$/i.test(value))
+      return ['Tu nombre solo debe incluir números, letras, espacios o guiones bajos']
+
+    return [false, value]
+  }, [])
+
+  useEffect(() => dispatch(loadUserFromCacheAction()), [])
 
   return (
-    <form onSubmit={emitChange} className={'' /*`bg-${color}-300 w-3/5 rounded-3xl mx-auto p-8`*/}>
-      {/* 
-      player name 
-      */}
-      <input
-        onChange={setName}
-        placeholder="¡ingresa tu nombre!"
-        type="text"
-        className={`bg-${color}-50 w-full rounded-full px-4 py-2 mb-4`}
-      />
-      {/* 
-      Color picker 
-      */}
-      <div className="flex justify-center gap-2">
-        {colors.map((c, i) => (
-          <label
-            key={i}
-            className={`bg-${c}-500 ${
-              color === c ? 'border-gray-200 border-4' : ''
-            } circle h-6 w-6 rounded-full block cursor-pointer`}
-          >
-            <input onChange={setColor} className="hidden" value={c} name="color" type="radio" />
-          </label>
-        ))}
-      </div>
-      {/* 
-      button submit
-      */}
-      <button
-        className={`bg-${color}-500 text-white fontbold mt-4 rounded-3xl w-2/5 py-2 mx-auto block`}
-        type="submit"
-      >
-        Unirse
-      </button>
-    </form>
+    <Card>
+      <form onSubmit={usePrevent()}>
+        <Input setter={setName} validator={validator} className="w-full">
+          ¡ingresa tu nombre!
+        </Input>
+
+        <ColorPicker />
+
+        <Button onClick={() => dispatch(setNameAction(name))} enabled={name !== ''}>
+          ¡Comenzar!
+        </Button>
+      </form>
+    </Card>
   )
 }

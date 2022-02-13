@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+/**@deprecated */
 export default function useInput(regex = /./) {
   const [value, setValue] = useState('')
 

@@ -1,20 +1,45 @@
 import Game from './classes/Game.mjs'
+import Player from './classes/Player.mjs'
+import simulator from './classes/utils/simulator.mjs'
 
 function main() {
-  const g = new Game()
+  Game.io = simulator('yellow')
 
-  g.newGame() // nothing happens, no players
+  const g = Game.create('bnkxcs')
+  const f = Game.create('w1nd0W')
 
-  g.addPlayer({ color: 'green', name: 'Luis' }) // create player
-  g.newGame() // nothing happens, only one player
+  Game.create('bnkxcs') // nothing must happen
 
-  g.addPlayer({ color: 'green', name: 'Ana' }) // color green reserved, player not added
-  g.newGame() // nothing happens, only one player
+  // console.log(Game.rooms)
 
-  g.addPlayer({ color: 'Violet', name: 'Ana' }) // player added
-  g.newGame() // game starts
+  f.addPlayer(new Player({ socket: simulator('blue', 'Luis'), name: 'Luis', color: 'green' }))
+  f.addPlayer(new Player({ socket: simulator('cyan', 'Luis'), name: 'Luis', color: 'cyan' }))
+  f.addPlayer(new Player({ socket: simulator('red', 'Evil'), name: 'Evil Luis', color: 'green' })) // color error
+  f.addPlayer(new Player({ socket: simulator('magenta', 'Mike'), name: 'Mike', color: 'blue' }))
 
-  // g.status()
+  // g.addPlayer(new Player({ socket: simulator('magenta'), name: 'Pablo', color: 'red' }))
+  // g.addPlayer(new Player({ socket: simulator('magenta'), name: 'Axel', color: 'purple' }))
+  // g.addPlayer(new Player({ socket: simulator('magenta'), name: ';;', color: 'green' })) // invalid name
+  // g.addPlayer(new Player({ socket: simulator('magenta'), name: 'Josa', color: 'orange' }))
+
+  // console.log(f.data())
+  // console.log(g.data())
+
+  // console.log(g.players[1])
+
+  f.start()
+}
+
+// passed
+function returnReference() {
+  const g = { a: 5, b: 5 }
+  const f = () => g
+
+  console.log(g)
+
+  f().a = 10
+
+  console.log(g)
 }
 
 main()

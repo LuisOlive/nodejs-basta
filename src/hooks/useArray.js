@@ -1,6 +1,2 @@
-
-
-
-export default function useArray(length) {
-  
-}
+/**@deprecated */
+export default function useArray(length) {}

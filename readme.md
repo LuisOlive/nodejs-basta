@@ -1,3 +1,31 @@
+# ¡Basta!
+
+¡El divertido juego de pensar palabras, traído del papel a la web!
+
+Full stack (MERN) game project
+
+## Technologies
+
+### Frontend
+
+- React.js + hooks
+- Vite
+- Redux
+- Lodash
+- Tailwind css
+
+### Backend
+
+- Express
+- Web Sockets
+- Mongodb
+
+### other
+
+- git
+- npm
+- environment variables
+
 ## Sources
 
 This code couldn't be possible without this recopilations

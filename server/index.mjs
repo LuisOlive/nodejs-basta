@@ -3,7 +3,8 @@ import { config as dotenv } from 'dotenv'
 import { Server } from 'socket.io'
 import { createServer } from 'http'
 import mongoose from 'mongoose'
-import main from './socketMain.mjs'
+import main from './main.mjs'
+import Game from './classes/Game.mjs'
 
 dotenv()
 const { PORT, FRONT_END_URL, MONGODB_USERNAME, MONGODB_PASSWORD, MONGODB_DBNAME } = process.env
@@ -22,5 +23,7 @@ mongoose
   .then(() => console.log('db ready'))
 
 io.on('connection', socket => main(socket, io))
+
+Game.io = io
 
 server.listen(PORT, () => console.log(`server ready on port ${PORT}`))

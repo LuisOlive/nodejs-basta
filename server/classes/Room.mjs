@@ -1,7 +1,9 @@
 import filter from 'lodash/filter.js'
 import colors from '../data/colors.mjs'
 import Game from './Game.mjs'
-
+/**
+ * @deprecated
+ */
 export default class Room {
   static rooms = {}
   static io = null
