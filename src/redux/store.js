@@ -5,8 +5,8 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
 
 // reducers
-import userReducer from './userDuck'
-import gameReducer from './gameDuck'
+import userReducer from './user'
+import gameReducer from './game'
 
 const reducer = combineReducers({ user: userReducer, game: gameReducer })
 

@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux'
 import { colors } from '../data/colors.json'
 import { useUser } from '../redux'
-import { setColorAction } from '../redux/userDuck'
+import { setColorAction } from '../redux/user/actions'
 
 export default function ColorPicker({}) {
   const { color } = useUser()

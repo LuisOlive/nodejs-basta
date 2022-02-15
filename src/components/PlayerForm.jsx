@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import usePrevent from '../hooks/usePrevent'
-import { loadUserFromCacheAction, setNameAction } from '../redux/userDuck'
+import { loadUserFromCacheAction, setNameAction } from '../redux/user/actions'
 
 import Button from './Button'
 import ColorPicker from './ColorPicker'

@@ -10,7 +10,8 @@ import PlayerForm from '../components/PlayerForm'
 
 import { useGame, useUser } from '../redux'
 import SpinnerCard from '../components/SpinnerCard'
-import { fillPlayersAction, setRoomId } from '../redux/gameDuck'
+import { setRoomId } from '../redux/game/mutations'
+import { fillPlayersAction } from '../redux/game/actions'
 
 export default function Game() {
   const dispatch = useDispatch()
