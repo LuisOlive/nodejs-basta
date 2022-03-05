@@ -24,8 +24,12 @@ export function setNameAction(name) {
   return (dispatch, getState) => {
     dispatch(setName(name))
 
-    const { color, roomId } = getState().user
-    socket.emit('user:tryenter', { name, color, roomId })
+    const {
+      user: { color },
+      game: { roomId }
+    } = getState()
+
+    socket.emit('user:asktojoin', { name, color, roomId })
   }
 }
 

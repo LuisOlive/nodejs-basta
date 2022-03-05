@@ -9,5 +9,5 @@ export default function room(id) {
     return result
   }
 
-  throw new Error(`room ${roomId} not found`)
+  throw `room ${id} not found`
 }

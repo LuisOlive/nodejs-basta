@@ -17,10 +17,9 @@ export default class Game {
   players = []
   availableColors = colors
 
-  /** @param {string} id */
   constructor({ id }) {
+    /** @type {string} id */
     this.id = id
-    // this.emit('room:created')
   }
 
   /**
@@ -107,6 +106,11 @@ export default class Game {
   }
 
   data() {
+    const { playersList: players, id, availableColors } = this
+    return { id, players, availableColors }
+  }
+
+  preview() {
     const { playersList: players, id, availableColors } = this
     return { id, players, availableColors }
   }

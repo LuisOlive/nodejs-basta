@@ -4,14 +4,13 @@ import { useDispatch } from 'react-redux'
 
 import Players from '../components/Players'
 import PlayerForm from '../components/PlayerForm'
+import SpinnerCard from '../components/SpinnerCard'
 // import Section from '../components/Section'
 // import Button from '../components/Button'
 // import GameForm from '../components/GameForm'
 
 import { useGame, useUser } from '../redux'
-import SpinnerCard from '../components/SpinnerCard'
-import { setRoomId } from '../redux/game/mutations'
-import { fillPlayersAction } from '../redux/game/actions'
+import { fillPlayersAction, setRoomIdAction } from '../redux/game/actions'
 
 export default function Game() {
   const dispatch = useDispatch()
@@ -21,7 +20,7 @@ export default function Game() {
   const { status: gameStatus, players } = useGame()
 
   useEffect(() => {
-    dispatch(setRoomId(roomId))
+    dispatch(setRoomIdAction(roomId))
     dispatch(fillPlayersAction())
   }, [])
 
