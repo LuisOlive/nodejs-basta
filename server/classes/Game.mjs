@@ -1,6 +1,7 @@
 import find from 'lodash/find.js'
 import pull from 'lodash/pull.js'
 import last from 'lodash/last.js'
+import remove from 'lodash/remove.js'
 
 import room from './utils/room.mjs'
 import colors from '../data/colors.mjs'
@@ -16,6 +17,8 @@ export default class Game {
   /** @type {Player[]} */
   players = []
   availableColors = colors
+  /** @type {GameStatus} */
+  status = 'CREATED'
 
   constructor({ id }) {
     /** @type {string} id */
@@ -61,25 +64,30 @@ export default class Game {
 
       player.socket.join(this.id)
 
-      player.emit(
-        'enter',
-        {
-          roomId: player.roomId,
-          admin: player.admin
-        },
-        'self'
-      )
-      this.emitPlayersList()
+      player.emitEnter()
+
+      player.socket.on('disconnect', () => this.deletePlayer(player.color))
+      // keep this at end
       this.verifyAdmin()
-      //
+      this.verifyStatus()
+      this.emitPlayersList()
     } catch (error) {
       console.error(error)
       player.emit('rejected', { error })
     }
   }
 
+  deletePlayer(color) {
+    remove(this.players, { color })
+    this.availableColors.push(color)
+    // keep this at end
+    this.verifyStatus()
+    this.emitPlayersList()
+    this.verifyAdmin()
+  }
+
   get admin() {
-    return find(this.players, 'admin')
+    return find(this.players, 'isAdmin')
   }
 
   verifyAdmin() {
@@ -99,15 +107,11 @@ export default class Game {
     if (!this.availableColors.includes(color)) {
       throw `color "${color}" already in use by another player`
     }
-
-    if (find(this.players, { name })) {
-      throw `name "${name}" already in use by another player`
-    }
   }
 
   data() {
-    const { playersList: players, id, availableColors } = this
-    return { id, players, availableColors }
+    const { playersList: players, id, availableColors, status } = this
+    return { id, players, availableColors, status }
   }
 
   preview() {
@@ -134,9 +138,24 @@ export default class Game {
   emitPlayersList() {
     this.emit('playerslist:change')
   }
+
+  verifyStatus() {
+    switch (this.players.length) {
+      case 0:
+        this.status = 'CREATED'
+        break
+      case 1:
+        this.status = 'WAITING_PLAYERS'
+        break
+      case 2:
+        this.status = 'WAITING_ADMIN'
+        break
+    }
+  }
 }
 
 /**
  * @typedef { import('./Player.mjs').default } Player
  * @typedef { import('./Round.mjs').default } Round
+ * @typedef {'CREATED' | 'WAITING_PLAYERS' | 'WAITING_ADMIN' | 'AT_ROUND'} GameStatus
  */

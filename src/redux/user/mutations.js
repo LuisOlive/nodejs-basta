@@ -1,5 +1,5 @@
 import { colors } from '../../data/colors.json'
-import { SET_COLOR, SET_ERROR, SET_NAME } from './types'
+import { SET_COLOR, SET_ERROR, SET_NAME, SET_STATUS } from './types'
 
 export function setName(name) {
   if (/^\S[a-z0-9ñáéíóú\s_]+\S$/i.test(name)) {
@@ -17,4 +17,8 @@ export function setColor(color) {
 
 export function setError(error) {
   return { type: SET_ERROR, payload: error }
+}
+
+export function setStatus(status) {
+  return { type: SET_STATUS, payload: status }
 }

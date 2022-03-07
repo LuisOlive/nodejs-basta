@@ -1,5 +1,13 @@
 import socket from '../../socket'
-import { setName, setColor, setError } from './mutations'
+import { setName, setColor, setError, setStatus } from './mutations'
+
+export function giveServerStateControlAction() {
+  return dispatch => {
+    socket.on('self:enter', ({}) => dispatch(setStatus('ACCEPTED')))
+
+    socket.on('self:admin', ({}) => dispatch(setStatus('ADMIN')))
+  }
+}
 
 export function loadUserFromCacheAction() {
   return dispatch => {
@@ -16,10 +24,6 @@ export function loadUserFromCacheAction() {
   }
 }
 
-export function setColorAction(color) {
-  return dispatch => dispatch(setColor(color))
-}
-
 export function setNameAction(name) {
   return (dispatch, getState) => {
     dispatch(setName(name))
@@ -31,6 +35,10 @@ export function setNameAction(name) {
 
     socket.emit('user:asktojoin', { name, color, roomId })
   }
+}
+
+export function setColorAction(color) {
+  return dispatch => dispatch(setColor(color))
 }
 
 export function setErrorAction(error) {

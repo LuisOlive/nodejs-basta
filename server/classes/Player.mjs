@@ -1,28 +1,35 @@
+import ShortUniqueId from 'short-unique-id'
 import room from './utils/room.mjs'
+
+const createAdminToken = new ShortUniqueId({ length: 25 })
 
 export default class Player {
   score = 0
-  admin = false
+  isAdmin = false
   roomId = ''
 
   constructor({ name, color, socket }) {
     /**@type {string} */
-    this.name = name.trim()
+    this.name = name
     this.socket = socket
     /**@type {string} */
     this.color = color
   }
 
   data() {
-    const { name, score, color, admin } = this
-    return { admin, color, name, score }
+    const { name, score, color, isAdmin } = this
+    return { isAdmin, color, name, score }
   }
 
   /**
    * @param {string} evName
    * @param {*} event
    */
-  emit(evName, event, prefix = 'player') {
+  emit(evName, event) {
+    this.#emit(evName, event, 'player')
+  }
+
+  #emit(evName, event, prefix = 'self') {
     try {
       this.socket.emit(`${prefix}:${evName}`, event)
     } catch {
@@ -35,8 +42,12 @@ export default class Player {
   }
 
   makeAdmin() {
-    this.admin = true
-    const { admin, roomId } = this
-    this.emit('admin', { admin, roomId }, 'self')
+    this.isAdmin = true
+    const { roomId } = this
+    this.#emit('admin', { adminToken: createAdminToken(), roomId })
+  }
+
+  emitEnter() {
+    this.#emit('enter', this.data())
   }
 }

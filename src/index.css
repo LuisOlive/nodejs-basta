@@ -3,10 +3,6 @@
   outline: none;
 }
 
-/* @tailwind base;
-@tailwind components;
-@tailwind utilities; */
-
 .spinner {
   width: 40px;
   height: 40px;

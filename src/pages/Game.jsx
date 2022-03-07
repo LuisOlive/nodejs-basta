@@ -4,52 +4,44 @@ import { useDispatch } from 'react-redux'
 
 import Players from '../components/Players'
 import PlayerForm from '../components/PlayerForm'
-import SpinnerCard from '../components/SpinnerCard'
-// import Section from '../components/Section'
-// import Button from '../components/Button'
-// import GameForm from '../components/GameForm'
+import InvitationCard from '../components/InvitationCard'
+import StartCard from '../components/StartCard'
 
 import { useGame, useUser } from '../redux'
 import { fillPlayersAction, setRoomIdAction } from '../redux/game/actions'
+import { giveServerStateControlAction as userServerAction } from '../redux/user/actions'
 
 export default function Game() {
   const dispatch = useDispatch()
 
   const { roomId } = useParams()
-  const { color, isIdentified } = useUser()
+  const { color, status: userStatus } = useUser()
   const { status: gameStatus, players } = useGame()
 
   useEffect(() => {
     dispatch(setRoomIdAction(roomId))
     dispatch(fillPlayersAction())
+    dispatch(userServerAction())
   }, [])
 
   return (
     <div className={`bg-${color}-100 h-screen flex`}>
       <aside className={`bg-${color}-00 w-1/5 px-0 py-16 h-screen`}>
-        <Players players={players} color={color} />
+        <Players />
       </aside>
 
       <main className={`flex justify-center items-center w-4/5 h-screen`}>
-        {!isIdentified || true ? (
+        {userStatus === 'UNSIGNED' ? (
           <PlayerForm />
         ) : gameStatus === 'WAITING_PLAYERS' ? (
-          <SpinnerCard>Esperando otros jugadores...</SpinnerCard>
+          <InvitationCard>Esperando jugadores</InvitationCard>
+        ) : userStatus === 'ADMIN' && gameStatus === 'WAITING_ADMIN' ? (
+          <StartCard />
+        ) : gameStatus === 'WAITING_ADMIN' ? (
+          <InvitationCard>Esperando que el administrador empieze la partida</InvitationCard>
         ) : (
           ''
         )}
-
-        {/*  {name === '' ? (
-            
-          ) : status === 1 ? (
-            'Esperando a que el administrador inicie la partida...'
-          ) : status === 2 ? (
-            <Button onClick={start}>Iniciar partida</Button>
-          ) : status === 3 ? (
-            <GameForm color={color} categories={categories} letter={letter} />
-          ) : (
-            ''
-          )}*/}
       </main>
     </div>
   )

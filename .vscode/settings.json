@@ -5,6 +5,7 @@
     "dist": false,
     "dist-ssr": false,
     "*.local": false,
-    ".env": false
+    ".env": false,
+    "**/.env": false
   }
 }
