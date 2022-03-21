@@ -1,11 +1,21 @@
+import { useCallback } from 'react'
+
 import Card from './Card'
 import Button from './Button'
 import InvitationLink from './InvitationLink'
 
-import { useUser } from '../redux'
+import { useGame, useUser } from '../redux'
+import socket from '../socket'
 
 export default function StartCard({ color }) {
-  const trueColor = color ?? useUser().color
+  const user = useUser()
+  const { roomId } = useGame()
+  const trueColor = user.color ?? color
+
+  const askToStart = useCallback(
+    () => socket.emit('admin:asktostart', { supposedAdmin: user, roomId }),
+    [user]
+  )
 
   return (
     <Card>
@@ -13,7 +23,9 @@ export default function StartCard({ color }) {
         ¡Ya hay rivales en espera!
       </p>
 
-      <Button className="mb-4">Iniciar partida</Button>
+      <Button className="mb-4" onClick={askToStart}>
+        Iniciar partida
+      </Button>
 
       <InvitationLink />
     </Card>

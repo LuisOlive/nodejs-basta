@@ -20,7 +20,7 @@ export default function SpinnerCard({ children, color, message }) {
         {message ?? 'Esperando'}...
       </p>
 
-      {children}
+      {children ?? ''}
     </Card>
   )
 }

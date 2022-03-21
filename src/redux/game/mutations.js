@@ -1,4 +1,12 @@
-import { FILL_PLAYERS, SET_ADMIN, SET_ROOM_ID, SET_AVAILABLE_COLORS, SET_STATUS } from './types'
+import {
+  FILL_PLAYERS,
+  SET_ADMIN,
+  SET_ROOM_ID,
+  SET_AVAILABLE_COLORS,
+  SET_STATUS,
+  SET_ROUND,
+  SET_RESULTS
+} from './types'
 
 export function setAdmin(admin) {
   return { type: SET_ADMIN, payload: admin }
@@ -18,4 +26,12 @@ export function setAvailableColors(colors) {
 
 export function setStatus(status) {
   return { type: SET_STATUS, payload: status }
+}
+
+export function setRound(round) {
+  return { type: SET_ROUND, payload: round }
+}
+
+export function setResults(results) {
+  return { type: SET_RESULTS, payload: results }
 }

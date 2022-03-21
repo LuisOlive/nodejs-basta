@@ -2,6 +2,7 @@ import find from 'lodash/find.js'
 import pull from 'lodash/pull.js'
 import last from 'lodash/last.js'
 import remove from 'lodash/remove.js'
+import orderBy from 'lodash/orderBy.js'
 
 import room from './utils/room.mjs'
 import colors from '../data/colors.mjs'
@@ -41,10 +42,13 @@ export default class Game {
   }
 
   start() {
-    this.rounds.push(new Round())
+    this.status = 'AT_ROUND'
+
+    this.rounds.push(new Round(this))
+
     this.emit('game:start', {
-      round: this.rounds.length,
-      ...this.round.data()
+      status: 'AT_ROUND',
+      round: { number: this.rounds.length, ...this.round.data() }
     })
   }
 
@@ -55,7 +59,7 @@ export default class Game {
   /** @param {Player} player */
   addPlayer(player) {
     try {
-      this.validatePlayer(player) // or die
+      this.validatePlayer(player)
 
       this.players.push(player)
 
@@ -66,13 +70,13 @@ export default class Game {
 
       player.emitEnter()
 
-      player.socket.on('disconnect', () => this.deletePlayer(player.color))
+      player.socket.on('disconnect', () => player.die())
       // keep this at end
       this.verifyAdmin()
       this.verifyStatus()
       this.emitPlayersList()
     } catch (error) {
-      console.error(error)
+      // console.error(error)
       player.emit('rejected', { error })
     }
   }
@@ -132,7 +136,11 @@ export default class Game {
   }
 
   get playersList() {
-    return this.players.map(p => p.data())
+    return orderBy(
+      this.players.map(p => p.data()),
+      'score',
+      'desc'
+    )
   }
 
   emitPlayersList() {
@@ -151,6 +159,15 @@ export default class Game {
         this.status = 'WAITING_ADMIN'
         break
     }
+  }
+
+  /** @param {Player} supposedAdmin*/
+  testAdmin(supposedAdmin) {
+    return (
+      this.admin.color === supposedAdmin.color &&
+      this.admin.adminToken === supposedAdmin.adminToken &&
+      this.admin.name === supposedAdmin.name
+    )
   }
 }
 

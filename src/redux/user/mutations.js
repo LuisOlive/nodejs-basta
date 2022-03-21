@@ -1,5 +1,5 @@
 import { colors } from '../../data/colors.json'
-import { SET_COLOR, SET_ERROR, SET_NAME, SET_STATUS } from './types'
+import { SET_ADMIN_TOKEN, SET_COLOR, SET_ERROR, SET_NAME, SET_STATUS } from './types'
 
 export function setName(name) {
   if (/^\S[a-z0-9ñáéíóú\s_]+\S$/i.test(name)) {
@@ -21,4 +21,8 @@ export function setError(error) {
 
 export function setStatus(status) {
   return { type: SET_STATUS, payload: status }
+}
+
+export function setAdminToken(adminToken) {
+  return { type: SET_ADMIN_TOKEN, payload: adminToken }
 }

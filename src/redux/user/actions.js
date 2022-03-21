@@ -1,11 +1,14 @@
 import socket from '../../socket'
-import { setName, setColor, setError, setStatus } from './mutations'
+import { setName, setColor, setError, setStatus, setAdminToken } from './mutations'
 
 export function giveServerStateControlAction() {
   return dispatch => {
     socket.on('self:enter', ({}) => dispatch(setStatus('ACCEPTED')))
 
-    socket.on('self:admin', ({}) => dispatch(setStatus('ADMIN')))
+    socket.on('self:admin', ({ adminToken }) => {
+      dispatch(setStatus('ADMIN'))
+      dispatch(setAdminToken(adminToken))
+    })
   }
 }
 

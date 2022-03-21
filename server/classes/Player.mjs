@@ -4,21 +4,34 @@ import room from './utils/room.mjs'
 const createAdminToken = new ShortUniqueId({ length: 25 })
 
 export default class Player {
-  score = 0
+  score = 0 //+ Math.floor(Math.random() * 100000)
   isAdmin = false
   roomId = ''
+  adminToken = ''
 
   constructor({ name, color, socket }) {
-    /**@type {string} */
+    /** @type {string} */
     this.name = name
     this.socket = socket
-    /**@type {string} */
+    /** @type {string} */
     this.color = color
   }
 
   data() {
     const { name, score, color, isAdmin } = this
     return { isAdmin, color, name, score }
+  }
+
+  makeAdmin() {
+    this.isAdmin = true
+    this.adminToken = createAdminToken()
+
+    const { roomId, adminToken } = this
+    this.#emit('admin', { adminToken, roomId })
+  }
+
+  emitEnter() {
+    this.#emit('enter', this.data())
   }
 
   /**
@@ -37,17 +50,15 @@ export default class Player {
     }
   }
 
+  die() {
+    this.room.deletePlayer(this.color)
+  }
+
   get room() {
     return room(this.roomId)
   }
 
-  makeAdmin() {
-    this.isAdmin = true
-    const { roomId } = this
-    this.#emit('admin', { adminToken: createAdminToken(), roomId })
-  }
-
-  emitEnter() {
-    this.#emit('enter', this.data())
+  get id() {
+    return this.socket.id
   }
 }

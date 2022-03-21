@@ -1,5 +1,12 @@
 import socket from '../../socket'
-import { fillPlayers, setRoomId, setAvailableColors, setStatus } from './mutations'
+import {
+  fillPlayers,
+  setRoomId,
+  setAvailableColors,
+  setStatus,
+  setRound,
+  setResults
+} from './mutations'
 
 export function fillPlayersAction() {
   return dispatch => {
@@ -20,9 +27,16 @@ export function setRoomIdAction(roomId) {
   }
 }
 
-/** @deprecated */
-export function giveServerStateControlAction() {
+export function listenGameAction() {
   return dispatch => {
-    socket.on('status:change', ({ status }) => dispatch(setStatus(status)))
+    socket.on('game:start', ({ status, round }) => {
+      dispatch(setRound(round))
+      dispatch(setStatus(status))
+    })
+
+    socket.on('countdown:finished', ({ results, status }) => {
+      dispatch(setStatus(status))
+      dispatch(setResults(results))
+    })
   }
 }

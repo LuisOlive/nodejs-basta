@@ -24,4 +24,17 @@ export default function main(socket) {
 
     room.addPlayer(player)
   })
+
+  socket.on('admin:asktostart', ({ supposedAdmin, roomId }) => {
+    const r = room(roomId)
+
+    if (r.testAdmin(supposedAdmin) && r.players.length > 1) {
+      r.start()
+    }
+  })
+
+  socket.on('player:sendanswers', ({ answers, roomId, color }) => {
+    const r = room(roomId)
+    r.round.saveResults({ color, answers })
+  })
 }

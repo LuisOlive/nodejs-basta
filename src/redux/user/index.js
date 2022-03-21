@@ -1,10 +1,11 @@
-import { SET_COLOR, SET_ERROR, SET_NAME, SET_STATUS } from './types'
+import { SET_COLOR, SET_ERROR, SET_NAME, SET_STATUS, SET_ADMIN_TOKEN } from './types'
 
 const initialState = {
   name: '',
   color: 'red',
   status: 'UNSIGNED',
-  error: ''
+  error: '',
+  adminToken: ''
 }
 
 export default function reducer(state = initialState, { type, payload }) {
@@ -17,6 +18,8 @@ export default function reducer(state = initialState, { type, payload }) {
       return { ...state, error: payload }
     case SET_STATUS:
       return { ...state, status: payload }
+    case SET_ADMIN_TOKEN:
+      return { ...state, adminToken: payload }
   }
   return state
 }
