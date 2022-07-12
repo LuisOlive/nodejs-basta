@@ -18,7 +18,8 @@ Full stack (MERN) game project
 
 - Express
 - Web Sockets
-- Mongodb
+- Mongodb + mongoose
+- Zod validator
 
 ### other
 

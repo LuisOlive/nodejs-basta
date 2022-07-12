@@ -1,72 +1,53 @@
-import find from 'lodash/find.js'
-import pull from 'lodash/pull.js'
-import last from 'lodash/last.js'
-import remove from 'lodash/remove.js'
-import orderBy from 'lodash/orderBy.js'
+import type { Server } from 'socket.io'
+import type Player from './Player.mjs'
 
-import room from './utils/room.mjs'
-import colors from '../data/colors.mjs'
+import { find, pull, last, remove, orderBy } from 'lodash'
+
+import colors from '../data/colors.js'
 
 import Round from './Round.mjs'
 
-export default class Game {
-  static rooms = []
-  static io
+type GameStatus = 'CREATED' | 'WAITING#PLAYERS' | 'WAITING_ADMIN' | 'AT_ROUND'
 
-  /** @type {Round[]} */
-  rounds = []
-  /** @type {Player[]} */
-  players = []
-  availableColors = colors
-  /** @type {GameStatus} */
-  status = 'CREATED'
+export default class Room {
+  static rooms = []
+  static io: Server
+
+  #id: string
+  #rounds: Round[] = []
+  #players: Player[] = []
+  #availableColors: string[] = colors
+  #status: GameStatus = 'CREATED'
 
   constructor({ id }) {
-    /** @type {string} id */
-    this.id = id
-  }
-
-  /**
-   * @param {string} id
-   * @returns {Game}
-   * */
-  static create(id) {
-    try {
-      return room(id)
-      //
-    } catch {
-      const g = new Game({ id })
-      Game.rooms.push(g)
-      return g
-    }
+    this.#id = id
   }
 
   start() {
-    this.status = 'AT_ROUND'
+    this.#status = 'AT_ROUND'
 
-    this.rounds.push(new Round(this))
+    this.#rounds.push(new Round(this))
 
     this.emit('game:start', {
       status: 'AT_ROUND',
-      round: { number: this.rounds.length, ...this.round.data() }
+      round: { number: this.#rounds.length, ...this.round.data() }
     })
   }
 
   get round() {
-    return last(this.rounds)
+    return last(this.#rounds)
   }
 
-  /** @param {Player} player */
-  addPlayer(player) {
+  addPlayer(player: Player) {
     try {
       this.validatePlayer(player)
 
       this.players.push(player)
 
-      player.roomId = this.id
-      pull(this.availableColors, player.color)
+      player.roomId = this.#id
+      pull(this.#availableColors, player.color)
 
-      player.socket.join(this.id)
+      player.socket.join(this.#id)
 
       player.emitEnter()
 
@@ -83,7 +64,7 @@ export default class Game {
 
   deletePlayer(color) {
     remove(this.players, { color })
-    this.availableColors.push(color)
+    this.#availableColors.push(color)
     // keep this at end
     this.verifyStatus()
     this.emitPlayersList()
@@ -108,34 +89,31 @@ export default class Game {
       throw `name must contain letters, numbers, spaces or undescores only, received "${name}"`
     }
 
-    if (!this.availableColors.includes(color)) {
+    if (!this.#availableColors.includes(color)) {
       throw `color "${color}" already in use by another player`
     }
   }
 
-  data() {
-    const { playersList: players, id, availableColors, status } = this
+  get data() {
+    const { players, #id: id, #availableColors: availableColors, #status: status } = this
+
     return { id, players, availableColors, status }
   }
 
-  preview() {
-    const { playersList: players, id, availableColors } = this
+  get preview() {
+    const { players, id, availableColors } = this.data
     return { id, players, availableColors }
   }
 
-  /**
-   * @param {string} evName
-   * @param {*} event
-   */
-  emit(evName, event = this.data()) {
+  emit(evName: string, event: object = this.data, prefix = 'room') {
     try {
-      Game.io.in(this.id).emit(evName, event)
+      Room.io.in(this.#id).emit(evName, event)
     } catch {
-      console.error(`(${this.id}): event "${prefix}:${evName}" not sended`)
+      console.error(`(${this.#id}): event "${prefix}:${evName}" not sended`)
     }
   }
 
-  get playersList() {
+  get players() {
     return orderBy(
       this.players.map(p => p.data()),
       'score',
@@ -150,13 +128,13 @@ export default class Game {
   verifyStatus() {
     switch (this.players.length) {
       case 0:
-        this.status = 'CREATED'
+        this.#status = 'CREATED'
         break
       case 1:
-        this.status = 'WAITING_PLAYERS'
+        this.#status = 'WAITING#PLAYERS'
         break
       case 2:
-        this.status = 'WAITING_ADMIN'
+        this.#status = 'WAITING_ADMIN'
         break
     }
   }
@@ -170,9 +148,3 @@ export default class Game {
     )
   }
 }
-
-/**
- * @typedef { import('./Player.mjs').default } Player
- * @typedef { import('./Round.mjs').default } Round
- * @typedef {'CREATED' | 'WAITING_PLAYERS' | 'WAITING_ADMIN' | 'AT_ROUND'} GameStatus
- */

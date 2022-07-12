@@ -1,4 +1,4 @@
-import Game from './classes/Game.mjs'
+import Game from './classes/Game.js'
 import Player from './classes/Player.mjs'
 import room from './classes/utils/room.mjs'
 

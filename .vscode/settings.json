@@ -6,6 +6,7 @@
     "dist-ssr": false,
     "*.local": false,
     ".env": false,
-    "**/.env": false
+    "**/.env": false,
+    "package-lock.json": true
   }
 }

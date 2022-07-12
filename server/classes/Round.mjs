@@ -47,24 +47,23 @@ export default class Round {
     this.tryStartCountDown()
   }
 
-  tryStartCountDown() {
-    if (this.timeLeft === 21) {
-      this.startCountDown()
-    }
-  }
-
   startCountDown() {
-    const interval = setInterval(() => {
-      const { timeLeft, results } = this
+    if (this.timeLeft === 21) {
+      const interval = setInterval(() => {
+        const { timeLeft, results } = this
 
-      this.room.emit('countdown:count', { timeLeft })
+        this.room.emit('countdown:count', { timeLeft })
 
-      if (!this.timeLeft--) {
-        clearInterval(interval)
-        this.room.status = 'WAITING_UNKNOWN_WORDS'
-        this.room.emit('countdown:finished', { results, status: 'WAITING_UNKNOWN_WORDS' })
-      }
-    }, 1000)
+        if (!this.timeLeft--) {
+          clearInterval(interval)
+          this.room.status = 'WAITING_UNKNOWN_WORDS'
+          this.room.emit('countdown:finished', {
+            results,
+            status: 'WAITING_UNKNOWN_WORDS'
+          })
+        }
+      }, 1000)
+    }
   }
 
   onTimeFinished() {}
@@ -90,7 +89,10 @@ export default class Round {
 
   fillAnswers(answers) {
     answers.forEach(({ category, words }) => {
-      this.answers[category] = words.map(w => ({ regex: new RegExp(`^${w}$`, 'i'), points: 100 }))
+      this.answers[category] = words.map(w => ({
+        regex: new RegExp(`^${w}$`, 'i'),
+        points: 100
+      }))
     })
   }
 
@@ -101,6 +103,6 @@ export default class Round {
 }
 /**
  * @typedef { import('./Player.mjs').default } Player
- * @typedef { import('./Game.mjs').default } Game
+ * @typedef { import('./Game.js').default } Game
  * @typedef {'CREATED' | 'WAITING_PLAYERS' | 'WAITING_ADMIN' | 'AT_ROUND'} GameStatus
  */

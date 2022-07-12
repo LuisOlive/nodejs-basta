@@ -1,9 +1,9 @@
 import find from 'lodash/find.js'
-import Game from '../Game.mjs'
+import Game from '../Game.js'
 
 /**
  * @param { string } id the room id
- * @returns { import('../Game.mjs').default }
+ * @returns { import('../Game.js').default }
  * */
 export default function room(id) {
   const result = find(Game.rooms, { id })

@@ -2,11 +2,9 @@
   "name": "quiz-app",
   "version": "0.0.0",
   "scripts": {
-    "dev": "npx vite",
-    ":": "npx vite",
-    "minitest": "node server/test.mjs",
-    "start": "cd server & npx nodemon index.mjs",
-    "backend": "npx nodemon server/index.mjs",
+    "frontend": "npx vite",
+    "backend": "npx nodemon server/index.ts",
+    "simulation": "npx nodemon server/test.ts",
     "seed": "node server/words/seed.mjs",
     "build": "vite build",
     "preview": "vite preview",
@@ -17,14 +15,14 @@
     "@fortawesome/free-regular-svg-icons": "^6.0.0",
     "@fortawesome/free-solid-svg-icons": "^6.0.0",
     "@fortawesome/react-fontawesome": "^0.1.17",
+    "@types/express": "^4.17.13",
     "chalk": "^2.4.2",
     "cors": "^2.8.5",
     "date-fns": "^2.28.0",
     "dotenv": "^14.2.0",
     "express": "^4.17.2",
     "lodash": "^4.17.21",
-    "mongoose": "^6.1.8",
-    "nodemon": "^2.0.15",
+    "mongoose": "^6.4.3",
     "password-generator": "^2.3.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -37,12 +35,16 @@
     "short-unique-id": "^4.4.4",
     "socket.io": "^4.4.1",
     "socket.io-client": "^4.4.1",
-    "tailwindcss": "^3.0.15"
+    "tailwindcss": "^3.0.15",
+    "zod": "^3.17.3"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.178",
     "@types/mongoose": "^5.11.97",
     "@vitejs/plugin-react": "^1.0.7",
+    "nodemon": "^2.0.18",
+    "ts-node": "^10.8.2",
+    "typescript": "^4.7.4",
     "vite": "^2.7.2"
   }
 }

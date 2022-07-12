@@ -17,4 +17,5 @@ const colors = [
   'pink',
   'rose'
 ]
+
 export default colors
