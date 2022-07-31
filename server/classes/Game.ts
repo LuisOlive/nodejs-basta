@@ -1,5 +1,5 @@
-import { find } from 'lodash'
-import InternalSocket from './InternalSocket'
+import { find, remove } from 'lodash'
+import type { InternalServer as Server } from './InternalSocketIO'
 
 import Room from './Room'
 
@@ -13,6 +13,14 @@ export default class Game {
   addRoom(room: Room) {
     this.#rooms.push(room)
     return room
+  }
+
+  /**
+   * DANGERIOUS. removes a room from server
+   * @param id id of room to search in server list
+   */
+  deleteRoom(id: string) {
+    remove(this.#rooms, { id })
   }
 
   /**
@@ -47,7 +55,7 @@ export default class Game {
   /**
    * gives the Game class important configurations before start operations
    */
-  constructor(io: InternalSocket) {
+  constructor(io: Server) {
     Room.io = io
   }
 }

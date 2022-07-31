@@ -1,12 +1,4 @@
-import {
-  FILL_PLAYERS,
-  SET_ADMIN,
-  SET_ROOM_ID,
-  SET_AVAILABLE_COLORS,
-  SET_STATUS,
-  SET_ROUND,
-  SET_RESULTS
-} from './types'
+import * as types from './types'
 import { colors } from '../../data/colors.json'
 
 const initialState = {
@@ -14,27 +6,30 @@ const initialState = {
   roomId: '',
   admin: false,
   round: null,
-  status: 'UNSIGNED', //
+  status: 'WAITING_PLAYERS',
   availableColors: colors,
-  results: []
+  results: [],
+  unknownAnswers: []
 }
 
 export default function reducer(state = initialState, { type, payload }) {
   switch (type) {
-    case FILL_PLAYERS:
+    case types.FILL_PLAYERS:
       return { ...state, players: payload }
-    case SET_ROOM_ID:
+    case types.SET_ROOM_ID:
       return { ...state, roomId: payload }
-    case SET_ADMIN:
+    case types.SET_ADMIN:
       return { ...state, admin: payload }
-    case SET_STATUS:
+    case types.SET_STATUS:
       return { ...state, status: payload }
-    case SET_AVAILABLE_COLORS:
+    case types.SET_AVAILABLE_COLORS:
       return { ...state, availableColors: payload }
-    case SET_ROUND:
+    case types.SET_ROUND:
       return { ...state, round: payload }
-    case SET_RESULTS:
+    case types.SET_RESULTS:
       return { ...state, results: payload }
+    case types.FILL_UNKNOWN_ANSWERS:
+      return { ...state, unknownAnswers: payload }
   }
   return state
 }

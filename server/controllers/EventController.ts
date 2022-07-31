@@ -9,54 +9,88 @@ import emits from './decorators/emits'
 import messageSchema, { Message } from '../validators/messageSchema'
 import guestSchema, { Guest } from '../validators/guestSchema'
 import roomIdSchema, { RoomId } from '../validators/roomIdSchema'
+import answersSchema, { AnswersRequest } from '../validators/answersSchema'
+import evaluationSchema, { Evaluation } from '../validators/evaluationSchema'
 
 export default class EventController extends Logger {
-  game = new Game()
+  game: Game
 
-  main(socket: Socket) {
-    // socket.onAny(console.log.bind(console))
-    // this.logCyan('new user conected :D')
-
-    socket.on('disconnect', e => this.logRed(e))
-    socket.on('guest:enter', e => this.sendRoomPreview(e, socket))
-    socket.on('message', e => this.receiveMessage(e))
-    socket.on('player:enter', e => this.sendRoomData(e, socket))
+  constructor(public io: Server) {
+    super()
+    this.game = new Game(io)
   }
 
-  @validate(roomIdSchema)
-  @emits('room:preview')
-  sendRoomPreview({ roomId }: RoomId, _: any) {
-    return this.game.findOrCreateRoom(roomId).preview
+  main(socket: Socket) {
+    socket.onAny(console.log.bind(console))
+    this.logCyan('new user conected :D')
+
+    socket.on('message', e => this.receiveMessage(e))
+    socket.on('guest:enter', e => this.sendRoomPreview(e, socket))
+    socket.on('player:enter', e => this.sendRoomData(e, socket))
+
+    socket.on('admin:startgame', e => this.startRoomGame(e, socket))
+    socket.on('player:sendanswers', e => this.receiveAnswers(e, socket))
+    socket.on('admin:evaluateword', e => this.evaluate(e, socket))
+  }
+
+  @validate(evaluationSchema)
+  evaluate(ans: Evaluation, _: Socket) {
+    const room = this.game.findRoom(ans.roomId)
+    room?.round?.evaluateUnknownResult(ans)
   }
 
   /**
-   * emits game room data to logget users
+   * emits game room data to unlogged users
+   */
+  @validate(roomIdSchema)
+  sendRoomPreview({ roomId }: RoomId, socket: Socket) {
+    const res = this.game.findOrCreateRoom(roomId).preview
+    socket.emit('room:preview', res)
+  }
+
+  /**
+   * emits game room data to logged users
    */
   @validate(guestSchema)
   @emits('room:update')
-  sendRoomData({ color, name, roomId }: Guest, _: any) {
-    const playerData = { color, name }
-
+  sendRoomData({ color, name, roomId }: Guest, socket: Socket) {
     const room = this.game.findOrCreateRoom(roomId)
+    const player = room.createPlayer({ color, name, socket })
 
-    if (room.findPlayer(playerData))
-      throw [
-        'validation:error',
-        `name & color combination must be different to another players, got "${name}" and "${color}"`
-      ]
+    socket.emit('guest:becomeplayer', player?.data)
 
-    room.createPlayer(playerData)
+    if (room.isPlaying) {
+      socket.emit('game:start', room.round?.data)
+    }
 
     return room.data
+  }
+
+  /**
+   * starts the game in a room
+   */
+  @validate(roomIdSchema)
+  @emits('game:start')
+  startRoomGame({ roomId }: RoomId, socket: Socket) {
+    const room = this.game.findRoom(roomId)
+
+    if (room?.admin?.id === socket.id) {
+      room?.play()
+    }
+
+    return room?.round?.data
+  }
+
+  @validate(answersSchema)
+  receiveAnswers({ answers, roomId, authorId }: AnswersRequest, {}: Socket) {
+    const room = this.game.findRoom(roomId)
+    room?.round?.savePlayerResults({ answers, authorId, roomId })
+    room?.round?.tryStartCountDown()
   }
 
   @validate(messageSchema)
   receiveMessage(msg: Message) {
     // @ts-ignore
     this.logGreen(msg?.message ?? msg)
-  }
-
-  constructor(public io: Server) {
-    super()
   }
 }

@@ -5,7 +5,7 @@
     "frontend": "npx vite",
     "backend": "npx nodemon server/index.ts",
     "simulation": "npx nodemon server/test.ts",
-    "seed": "node server/words/seed.mjs",
+    "seeder": "npx ts-node server/seeder.ts",
     "build": "vite build",
     "preview": "vite preview",
     "tw": "npx tailwindcss -o src/tailwind.css"

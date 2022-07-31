@@ -1,7 +1,5 @@
 import chalk from 'chalk'
-/**
- * @deprecated
- */
+
 export default class ColorLogger {
   logCyan(msg: string) {
     console.log(chalk.cyan(msg))

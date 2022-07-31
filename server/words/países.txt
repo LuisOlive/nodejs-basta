@@ -1,1 +1,201 @@
-Afganistán,Albania,Alemania,Andorra,Angola,Antigua Y Barbuda,Arabia Saudita,Argelia,Argentina,Armenia,Australia,Austria,Azerbaiyán,Bahamas,Bangladés,Barbados,Baréin,Belice,Benin,Bielorrusia,Birmania,Bolivia,Bosnia Y Herzegovina,Botsuana,Brasil,Brazil,Brunei,Bulgaria,Burkina Faso,Burundi,Bután,Bélgica,Cabo Verde,Camboya,Camerún,Canadá,Catar,Chad,Chile,China,Chipre,Colombia,Comoras,Corea Del Norte,Corea Del Sur,Costa De Marfil,Costa Rica,Croacia,Cuba,Dinamarca,Dominica,Ecuador,Egipto,El Salvador,Emiratos Arabes Unidos,Eritrea,Eslovaquia,Eslovenia,España,Estados Unidos,Estonia,Etiopía,Filipinas,Finlandia,Fiyi,Francia,Gabón,Gambia,Georgia,Germania,Ghana,Granada,Grecia,Guatemala,Guinea,Guinea-Bissau,Guinea Ecuatorial,Guyana,Haití,Holanda,Honduras,Hungría,India,Indonesia,Iraq,Irlanda,Irán,Islandia,Islas Cook Islands,Islas Marshall,Islas Salomón,Israel,Ingleterra,Italia,Jamaica,Japón,Jordania,Kazajistán,Kenia,Kirguistán,Kiribati,Korea,Kosovo,Kuwait,Laos,Lesoto,Letonia,Liberia,Libia,Liechtenstein,Lituania,Luxemburgo,Líbano,Madagascar,Malasia,Malaui,Maldivas,Mali,Malta,Marruecos,Mauricio,Mauritania,Micronesia,Moldavia,Mongolia,Montenegro,Mozambique,Myanmar,México,Mónaco,Namibia,Nauru,Nepal,Nicaragua,Nigeria,Niu,Noruega,Nueva Zelanda,Níger,Omán,Pakistán,Palaos,Palestina,Panamá,Papúa Nueva Guinea,Paraguay,Países Bajos,Perú,Polonia,Portugal,Puerto Rico,Reino Unido,República Centroafricana,República Checa,República De Macedonia,República Del Congo,República Democrática Del Congo,República Dominicana,Ruanda,Rumania,Rusia,Samoa,San Cristóbal Y Nieves,San Marino,San Vicente Y Las Granadinas,Santa Lucía,Santo Tomé Y Príncipe,Senegal,Serbia,Seychelles,Sierra Leona,Siria,Somalia,Sri Lanka,Suazilandia,Sudáfrica,Sudán,Sudán Del Sur,Suecia,Suiza,Surinam,Tailandia,Taiwan,Tanzania,Tayikistán,Timor Oriental,Togo,Tonga,Trinidad Y Tobago,Turkmenistán,Turquía,Tuvalu,Túnez,Ucrania,Uganda,Uruguay,Uzbekistán,Vanuatu,Venezuela,Vietnam,Yemen,Yibuti,Zambia,Zimbabue
+Afganista|án
+Albania
+Alemania
+Andorra
+Angola
+Antigua Y Barbuda
+Arabia Saudita
+Argelia
+Argentina
+Armenia
+Australia
+Austria
+Azerbaiya|án
+Bahamas
+Banglade|és
+Barbados
+Bare|éin
+Belice
+Benin
+Be|élgica
+Bielorrusia
+Birmania
+Bolivia
+Bosnia Y Herzegovina
+Botsuana
+Brasil
+Brazil
+Brunei
+Bulgaria
+Burkina Faso
+Burundi
+Buta|án
+Cabo Verde
+Camboya
+Cameru|ún
+Canada|á
+Catar
+Chad
+Chile
+China
+Chipre
+Colombia
+Comoras
+Congo
+Corea
+Costa De Marfil
+Costa Rica
+Croacia
+Cuba
+Dinamarca
+Dominica
+Ecuador
+Egipto
+Emiratos Arabes Unidos
+Eritrea
+Eslovaquia
+Eslovenia
+España
+Estados Unidos
+Estonia
+Etiopi|ía
+Filipinas
+Finlandia
+Fiyi
+Francia
+Gabo|ón
+Gambia
+Georgia
+Germania
+Ghana
+Granada
+Grecia
+Guatemala
+Guinea
+Guyana
+Haiti|í
+Holanda
+Honduras
+Hungri|ía
+India
+Indonesia
+Ingleterra
+Iraq
+Ira|án
+Irlanda
+Islandia
+Islas Cook Islands
+Islas Marshall
+Islas Salomo|ón
+Israel
+Italia
+Jamaica
+Japo|ón
+Jordania
+Kazajista|án
+Kenia
+Kirguista|án
+Kiribati
+Korea
+Kosovo
+Kuwait
+Laos
+Lesoto
+Letonia
+Liberia
+Libia
+Liechtenstein
+Lituania
+Li|íbano
+Luxemburgo
+Madagascar
+Malasia
+Malaui
+Maldivas
+Mali
+Malta
+Marruecos
+Mauricio
+Mauritania
+Me|éxico
+Micronesia
+Moldavia
+Mongolia
+Montenegro
+Mozambique
+Mo|ónaco
+Myanmar
+Namibia
+Nauru
+Nepal
+Nicaragua
+Nigeria
+Niu
+Ni|íger
+Noruega
+Nueva Zelanda
+Oma|án
+Pai|íses Bajos
+Pakista|án
+Palaos
+Palestina
+Panama|á
+Papu|úa Nueva Guinea
+Paraguay
+Peru|ú
+Polonia
+Portugal
+Puerto Rico
+Reino Unido
+Repu|ública Centroafricana
+Repu|ública Checa
+Repu|ública De Macedonia
+Repu|ública Del Congo
+Repu|ública Democra|ática Del Congo
+Repu|ública Dominicana
+Ruanda
+Rumania
+Rusia
+Samoa
+San Cristo|óbal Y Nieves
+San Marino
+San Vicente Y Las Granadinas
+Santa Luci|ía
+Santo Tome|é Y Pri|íncipe
+Senegal
+Serbia
+Seychelles
+Sierra Leona
+Siria
+Somalia
+Sri Lanka
+Suazilandia
+Suda|áfrica
+Suda|án
+Suda|án Del Sur
+Suecia
+Suiza
+Surinam
+Tailandia
+Taiwan
+Tanzania
+Tayikista|án
+Timor Oriental
+Togo
+Tonga
+Trinidad Y Tobago
+Turkmenista|án
+Turqui|ía
+Tuvalu
+Tu|únez
+Ucrania
+Uganda
+Uruguay
+Uzbekista|án
+Vanuatu
+Venezuela
+Vietnam
+Yemen
+Yibuti
+Zambia
+Zimbabue

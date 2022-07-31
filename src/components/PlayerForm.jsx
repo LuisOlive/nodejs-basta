@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import usePrevent from '../hooks/usePrevent'
-import { loadUserFromCacheAction, setNameAction } from '../redux/user/actions'
+import * as userActions from '../redux/user/actions'
 
 import Button from './Button'
 import ColorPicker from './ColorPicker'
@@ -23,7 +23,12 @@ export default function PlayerForm() {
     return [false, value]
   }, [])
 
-  useEffect(() => dispatch(loadUserFromCacheAction()), [])
+  const submit = useCallback(() => {
+    dispatch(userActions.setNameAction(name))
+    dispatch(userActions.loginAction())
+  }, [name])
+
+  useEffect(() => dispatch(userActions.loadUserFromCacheAction()), [])
 
   return (
     <Card>
@@ -34,7 +39,7 @@ export default function PlayerForm() {
 
         <ColorPicker />
 
-        <Button onClick={() => dispatch(setNameAction(name))} enabled={name !== ''}>
+        <Button onClick={submit} enabled={name !== ''}>
           ¡Comenzar!
         </Button>
       </form>

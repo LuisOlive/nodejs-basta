@@ -2,12 +2,13 @@ import ShortUniqueId from 'short-unique-id'
 
 import type { Player as IPlayer } from '../validators/playerSchema'
 
-import type Socket from './InternalSocket'
+import type Socket from './InternalSocketIO'
 import type Room from './Room'
 
-const createAdminToken = new ShortUniqueId({ length: 25 })
+const createPublicToken = new ShortUniqueId({ length: 4 })
 
 export default class Player {
+  readonly publicToken: string = createPublicToken()
   #color = ''
   #isAdmin = false
   #name = ''
@@ -25,17 +26,23 @@ export default class Player {
 
   makeAdmin() {
     this.#isAdmin = true
-    // this.#adminToken = createAdminToken()
-    this.emit('player:becomeadmin', {})
+    this.emit('player:becomeadmin', { id: this.publicToken })
   }
 
   get data() {
     return {
       admin: this.#isAdmin,
       color: this.#color,
+      id: this.publicToken,
       name: this.#name,
       score: this.#score
     }
+  }
+
+  set room(r: Room) {
+    this.#room = r
+    this.#socket.join(this.#room.id)
+    this.#socket.on('disconnect', () => this.die())
   }
 
   constructor({ name, color, socket }: PlayerParams) {
@@ -49,7 +56,7 @@ export default class Player {
   }
 
   get id() {
-    return this.#socket.id
+    return this.#socket.id ?? ''
   }
 
   get name() {
@@ -62,10 +69,6 @@ export default class Player {
 
   get room() {
     return this.#room
-  }
-
-  set room(r: Room) {
-    this.#room = r
   }
 }
 

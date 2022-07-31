@@ -17,9 +17,9 @@ const io = new Server(server, { cors: [frontendUrl] })
 const evc = new EventController(io)
 
 // db
-// connect()
-//   .then(() => console.log('db ready'))
-//   .catch(() => console.log('something wrong connecting db, surely ip adress again'))
+connect()
+  .then(() => console.log('db ready'))
+  .catch(() => console.log('something wrong connecting db, surely ip adress again'))
 
 // starting websockets
 io.on('connection', evc.main.bind(evc))

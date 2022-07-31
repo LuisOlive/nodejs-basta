@@ -1,42 +1,46 @@
 import socket from '../../socket'
-import {
-  fillPlayers,
-  setRoomId,
-  setAvailableColors,
-  setStatus,
-  setRound,
-  setResults
-} from './mutations'
+import * as muts from './mutations'
 
-export function fillPlayersAction() {
+export function watchRoomUpdatesAction() {
   return dispatch => {
-    socket.on('playerslist:change', ({ players, availableColors, status }) => {
-      dispatch(fillPlayers(players))
-      dispatch(setAvailableColors(availableColors))
-      dispatch(setStatus(status))
+    socket.on('room:update', ({ players, status }) => {
+      dispatch(muts.fillPlayers(players))
+      dispatch(muts.setStatus(status))
+    })
+
+    socket.on('room:preview', ({ players }) => {
+      dispatch(muts.fillPlayers(players))
     })
   }
+}
+
+/** @deprecated and it doeen't anything*/
+export function fillPlayersAction() {
+  return dispatch => {}
 }
 
 /** @param {string} roomId */
 export function setRoomIdAction(roomId) {
   return dispatch => {
-    // console.log('action="user:askforpreview"', roomId, { roomId })
-    dispatch(setRoomId(roomId))
-    socket.emit('user:askforpreview', { roomId: roomId }) // destructuring doesn't work
+    // console.log('action="guest:enter"', roomId, { roomId })
+    dispatch(muts.setRoomId(roomId))
+    socket.emit('guest:enter', { roomId: roomId }) // destructuring doesn't work
   }
 }
 
 export function listenGameAction() {
   return dispatch => {
-    socket.on('game:start', ({ status, round }) => {
-      dispatch(setRound(round))
-      dispatch(setStatus(status))
-    })
+    socket.on('game:start', round => dispatch(muts.setRound(round)))
 
-    socket.on('countdown:finished', ({ results, status }) => {
-      dispatch(setStatus(status))
-      dispatch(setResults(results))
+    socket.on('countdown:finish', ({ results, status }) => {
+      dispatch(muts.setStatus(status))
+      dispatch(muts.setResults(results))
     })
+  }
+}
+
+export function prepareIfNamedAdminAction() {
+  return dispatch => {
+    socket.on('game:unknownanswers', items => dispatch(muts.fillUnknownAnswers(items)))
   }
 }

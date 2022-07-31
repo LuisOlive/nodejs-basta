@@ -13,6 +13,7 @@ export default function validate(validator: Schema) {
       const safeEvent = validator.safeParse(event)
 
       if (safeEvent.success) {
+        // calling original method forcing "this" context
         return originalValue.call(this, safeEvent.data, socket)
         //
       } else if (socket && socket.emit && typeof socket.emit === 'function') {

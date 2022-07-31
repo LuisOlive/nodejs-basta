@@ -8,8 +8,6 @@ export const CategorySchema = new mongoose.Schema(
   { versionKey: false }
 )
 
-export default function CategoryOfLetter(letter) {
-  if (typeof letter !== 'string' || letter.length > 1) return { create() {} }
-
+export default function letterCategory(letter: string) {
   return mongoose.model(`${letter}-word`, CategorySchema)
 }

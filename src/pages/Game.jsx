@@ -10,21 +10,23 @@ import SpinnerCard from '../components/SpinnerCard'
 import GameForm from '../components/GameForm'
 
 import { useGame, useUser } from '../redux'
-import { fillPlayersAction, setRoomIdAction, listenGameAction } from '../redux/game/actions'
-import { giveServerStateControlAction as userServerAction } from '../redux/user/actions'
+import * as userActions from '../redux/user/actions'
+import * as gameActions from '../redux/game/actions'
+import UnknownAnswers from '../components/UnknownAnswers'
 
 export default function Game() {
   const dispatch = useDispatch()
 
   const { roomId } = useParams()
   const { color, status: userStatus } = useUser()
-  const { status: gameStatus } = useGame()
+  const { status: gameStatus, round } = useGame()
 
   useEffect(() => {
-    dispatch(setRoomIdAction(roomId))
-    dispatch(fillPlayersAction())
-    dispatch(userServerAction())
-    dispatch(listenGameAction())
+    dispatch(gameActions.setRoomIdAction(roomId))
+    dispatch(userActions.watchPlayerUpdatesAction())
+    dispatch(gameActions.watchRoomUpdatesAction())
+    dispatch(gameActions.listenGameAction())
+    dispatch(gameActions.prepareIfNamedAdminAction())
   }, [])
 
   return (
@@ -34,23 +36,32 @@ export default function Game() {
       </aside>
 
       <main className={`flex justify-center items-center w-3/4 h-screen`}>
-        {userStatus === 'UNSIGNED' ? (
-          <PlayerForm />
-        ) : gameStatus === 'WAITING_PLAYERS' ? (
-          <InvitationCard>Esperando jugadores</InvitationCard>
-        ) : userStatus === 'ADMIN' && gameStatus === 'WAITING_ADMIN' ? (
-          <StartCard />
-        ) : gameStatus === 'WAITING_ADMIN' ? (
-          <InvitationCard>Esperando que el administrador empieze la partida</InvitationCard>
-        ) : gameStatus === 'AT_ROUND' ? (
-          <GameForm />
-        ) : gameStatus === 'WAITING_UNKNOWN_WORDS' ? (
-          <SpinnerCard message="Revisando tus resultados">
-            Algunas palabran no están en la base de datos ...por ahora
-          </SpinnerCard>
-        ) : (
-          ''
-        )}
+        {(() => {
+          //
+          if (userStatus === 'UNSIGNED') return <PlayerForm />
+
+          /* using switch case for select components */
+          switch (gameStatus) {
+            case 'WAITING_PLAYERS':
+              return <InvitationCard>Esperando jugadores</InvitationCard>
+
+            case 'WAITING_ADMIN':
+              if (userStatus === 'ADMIN') return <StartCard />
+
+              return <InvitationCard>Esperando que el administrador empieze la partida</InvitationCard>
+
+            case 'AT_ROUND':
+              if (round) return <GameForm />
+
+              return <SpinnerCard message="Iniciando la partida">Por favor, espera un poco</SpinnerCard>
+
+            case 'WAITING_UNKNOWN_WORDS':
+              if (userStatus === 'ADMIN') return <UnknownAnswers />
+
+              return <SpinnerCard message="Revisando los resultados">Algunas palabras no están en la base de datos ...por ahora</SpinnerCard>
+          }
+          //
+        })()}
       </main>
     </div>
   )

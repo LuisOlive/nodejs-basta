@@ -1,9 +1,11 @@
 import Room from './classes/Room'
 import Game from './classes/Game'
 import Player from './classes/Player'
+import Round from './classes/Round'
+import { SocketSimulator } from './classes/InternalSocketIO'
 import guestSchema from './validators/guestSchema'
-import { SocketSimulator } from './classes/InternalSocket'
 import { Color } from './validators/playerSchema'
+import connect, { dotenv } from './connection'
 
 function simulate() {
   const io = new SocketSimulator('cyan', 'Basta')
@@ -42,6 +44,12 @@ function simulate() {
   marco.die()
   luis.die()
   room2.findPlayer('123456')?.die()
+
+  room1.play()
+  room2.play()
+
+  console.log(room1.round?.data)
+  console.log(room2.round?.data)
 }
 
 function request(name: string, color: Color) {
@@ -63,4 +71,6 @@ function returnReference() {
 }
 
 // returnReference()
-simulate()
+connect().then(() => {
+  simulate()
+})

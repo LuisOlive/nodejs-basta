@@ -8,7 +8,7 @@ Full stack (MERN) game project
 
 ### Frontend
 
-- React.js + hooks
+- Reactjs + hooks
 - Vite
 - Redux
 - Lodash
@@ -16,6 +16,7 @@ Full stack (MERN) game project
 
 ### Backend
 
+- Typescript
 - Express
 - Web Sockets
 - Mongodb + mongoose
@@ -26,6 +27,7 @@ Full stack (MERN) game project
 - git
 - npm
 - environment variables
+- OOP
 
 ## Sources
 
@@ -39,6 +41,8 @@ This code couldn't be possible without this recopilations
 - https://bolcereales.com.ar/alimentacion/lista-de-frutas/
 - https://frutas.consumer.es/
 - https://www.spanish.cl/vocabulario/verduras.htm
+- https://www.wikilengua.org/index.php/Lista_de_colores
+- https://animapedia.org/nombres-de-animales/
 
 And they would be a headache to format without the help of:
 

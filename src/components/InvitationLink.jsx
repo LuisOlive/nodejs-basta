@@ -31,7 +31,7 @@ export default function InvitationLink({}) {
 
       {/* Button */}
       <Button className="" onClick={copyMessage} enabled>
-        {messageIsCopied || linkIsCopied ? '¡Copiado!' : 'Copiar mensaje de invitación'}
+        {messageIsCopied || linkIsCopied ? '¡Copiado!' : 'Copiar invitación'}
       </Button>
     </div>
   )

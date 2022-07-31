@@ -1,37 +1,33 @@
-import {
-  FILL_PLAYERS,
-  SET_ADMIN,
-  SET_ROOM_ID,
-  SET_AVAILABLE_COLORS,
-  SET_STATUS,
-  SET_ROUND,
-  SET_RESULTS
-} from './types'
+import * as types from './types'
 
 export function setAdmin(admin) {
-  return { type: SET_ADMIN, payload: admin }
+  return { type: types.SET_ADMIN, payload: admin }
 }
 
 export function setRoomId(roomId) {
-  return { type: SET_ROOM_ID, payload: roomId }
+  return { type: types.SET_ROOM_ID, payload: roomId }
 }
 
 export function fillPlayers(players) {
-  return { type: FILL_PLAYERS, payload: players }
+  return { type: types.FILL_PLAYERS, payload: players }
 }
-
+/** @deprecated and doesn't anything*/
 export function setAvailableColors(colors) {
-  return { type: SET_AVAILABLE_COLORS, payload: colors }
+  return { type: '', payload: colors }
 }
 
 export function setStatus(status) {
-  return { type: SET_STATUS, payload: status }
+  return { type: types.SET_STATUS, payload: status }
 }
 
 export function setRound(round) {
-  return { type: SET_ROUND, payload: round }
+  return { type: types.SET_ROUND, payload: round }
 }
 
 export function setResults(results) {
-  return { type: SET_RESULTS, payload: results }
+  return { type: types.SET_RESULTS, payload: results }
+}
+
+export function fillUnknownAnswers(payload) {
+  return { type: types.FILL_UNKNOWN_ANSWERS, payload }
 }

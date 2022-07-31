@@ -1,6 +1,13 @@
 import { useEffect, useState } from 'react'
 
-export default function Input({ setter, className, placeholder, children, validator }) {
+export default function Input({
+  setter,
+  className,
+  placeholder,
+  children,
+  validator,
+  inputClassName
+}) {
   const [errorMessage, setErrorMessage] = useState('')
   const [value, setValue] = useState('')
   const [firstTime, setFirstTime] = useState(true)
@@ -24,7 +31,7 @@ export default function Input({ setter, className, placeholder, children, valida
   return (
     <label className={`py-3 inline-block ${className}`}>
       <input
-        className="rounded-full px-4 py-2 w-full inline-block"
+        className={'rounded-full px-4 py-2 w-full inline-block ' + inputClassName}
         placeholder={placeholder ?? children ?? ''}
         onChange={e => {
           setValue(e.target.value)

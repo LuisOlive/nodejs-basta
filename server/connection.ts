@@ -1,4 +1,7 @@
 import { connect as mongoose } from 'mongoose'
+import { config as dotenv } from 'dotenv'
+
+dotenv()
 
 const {
   MONGODB_USERNAME: username,
@@ -10,6 +13,9 @@ const uri = `mongodb+srv://${username}:${password}@cluster0.jdepz.mongodb.net/${
 
 const connect = () =>
   // @ts-ignore
-  mongoose(uri, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
+  mongoose(uri, { useNewUrlParser: true, useUnifiedTopology: true })
 
+// console.log(uri)
+
+export { dotenv }
 export default connect

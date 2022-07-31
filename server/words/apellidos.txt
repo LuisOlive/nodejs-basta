@@ -41,7 +41,6 @@ Altamirano
 Alva
 Alvarado
 Alvarenga
-A|Álv|barez|s
 Amador
 Amaro
 Amaya
@@ -73,8 +72,8 @@ Archuleta
 Arellano
 Arenas
 Arevalo
-Argu|üello
 Argueta
+Argu|üello
 Ari|ías
 Armenda|áriz
 Armenta
@@ -90,10 +89,10 @@ Ascencio
 Avalos
 Avelar
 Avendano
-Á|Avila
 Avile|és|z
 Avina
 Ayala
+A|Álv|barez|s
 Baca
 Badillo
 Baez
@@ -178,7 +177,7 @@ Campos
 Canales
 Candelaria
 Cano
-Cantu
+Cantu|ú
 Caraballo
 Carbajal
 Cardenas
@@ -270,8 +269,6 @@ Damian
 Davalos
 Davila
 Davis
-Deanda
-Dejesus
 De la cruz
 De la fuente
 De la garza
@@ -279,8 +276,10 @@ De la o
 De la paz
 De la rosa
 De la torre
-Del cid
 De leo|ón
+Deanda
+Dejesus
+Del cid
 Delgadillo
 Delgado
 Delossantos
@@ -289,16 +288,16 @@ Deltoro
 Deluna
 Delvalle
 Desantiago
-Di|íaz
 Dimas
+Di|íaz
 Dominguez
 Duarte
 Duenas
 Duque
 Dura|án
 Duro|ón
-Echevarria
-Echeverria
+Echevarri|ía
+Echeverri|ía
 Edwards
 Elias
 Elizalde
@@ -463,8 +462,8 @@ Lee
 Leija
 Leiva
 Lemus
-Leo|ón
 Leos
+Leo|ón
 Lerma
 Lewis
 Leyva
@@ -478,7 +477,6 @@ Loera
 Lomeli
 Long
 Longoria
-Lo|ópez
 Lora
 Loredo
 Lorenzo
@@ -487,6 +485,7 @@ Loya
 Loza
 Lozada
 Lozano
+Lo|ópez
 Lucas
 Lucero
 Luciano
@@ -498,8 +497,8 @@ Luna
 Macedo
 Machado
 Machuca
-Maci|ías
 Maciel
+Maci|ías
 Madera
 Madrid
 Madrigal
@@ -517,8 +516,8 @@ Manzano
 Manzo
 Maravilla
 Mares
-Mari|ín
 Mariscal
+Mari|ín
 Marquez
 Marrero
 Marroqui|ín
@@ -730,8 +729,8 @@ Quintero
 Quiroga
 Quiroz
 Ramires|z
-Ramo|ón
 Ramos
+Ramo|ón
 Rangel
 Rasco|ón
 Raya
@@ -960,9 +959,10 @@ Zamora
 Zamudio
 Zapata
 Zaragoza
-Za|árate
 Zavala
 Zayas
+Za|árate
 Zelaya
 Zepeda
-Zuniga
+Zun|ñiga
+Á|Avila

@@ -3,38 +3,37 @@ import { useCallback, useEffect, useState } from 'react'
 import CircleCard from './CircleCard'
 import Button from './Button'
 import Input from './Input'
-import SpinnerCard from './SpinnerCard'
 
 import socket from '../socket'
 
 import { useGame, useUser } from '../redux'
 import useGroup from '../hooks/useGroup'
 import usePrevent from '../hooks/usePrevent'
+import useBoolean from '../hooks/useBoolean'
 
 export default function GameForm() {
   const [answers, setters] = useGroup(['', '', '', '', ''])
   const [timeLeft, setTimeLeft] = useState(20)
-  const [hasAnswered, setHasAnswered] = useState(false)
+  const { value: hasAnswered, makeTrue: confirmHasAnswered } = useBoolean()
 
-  const { color } = useUser()
+  const { id } = useUser()
   const {
-    round: { letter, categories },
-    roomId
+    roomId,
+    round: { letter, categories }
   } = useGame()
 
-  const calcSpan = useCallback(i => ((i + 1) % 3 ? '' : 'col-span-2'))
+  const calcSpan = useCallback(i => (i + 1) % 3 || 'col-span-2', [])
 
   const sendAnswers = useCallback(() => {
-    socket.emit('player:sendanswers', { answers, roomId, color })
-  }, [answers])
+    confirmHasAnswered()
+    socket.emit('player:sendanswers', { answers, roomId, authorId: id })
+  }, [answers, id])
+
+  useEffect(() => socket.on('countdown:count', ({ timeLeft: t }) => setTimeLeft(t)), [])
 
   useEffect(() => {
-    socket.on('countdown:count', ({ timeLeft }) => {
-      setTimeLeft(timeLeft)
-
-      if (!hasAnswered && timeLeft === 0) sendAnswers()
-    })
-  }, [hasAnswered])
+    if (!hasAnswered && timeLeft === 1) sendAnswers()
+  }, [hasAnswered, timeLeft, sendAnswers])
 
   return (
     <CircleCard circleMessage={timeLeft < 20 ? timeLeft : letter}>

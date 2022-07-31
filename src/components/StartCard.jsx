@@ -12,10 +12,7 @@ export default function StartCard({ color }) {
   const { roomId } = useGame()
   const trueColor = user.color ?? color
 
-  const askToStart = useCallback(
-    () => socket.emit('admin:asktostart', { supposedAdmin: user, roomId }),
-    [user]
-  )
+  const askToStart = useCallback(() => socket.emit('admin:startgame', { roomId }), [])
 
   return (
     <Card>

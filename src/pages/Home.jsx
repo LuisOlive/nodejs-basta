@@ -12,33 +12,55 @@ export default function App() {
   const [roomId, setRoomId] = useState('')
 
   return (
-    <div className="flex justify-center py-4">
-      <div className="w-4/5">
-        <h1 className="text-5xl mb-2">¡basta!</h1>
-        <h2 className="text-2xl">
+    <main className="flex flex-col justify-center items-center py-4">
+      <div className="w-4/5 h-[75vh] flex flex-col justify-center">
+        <h1 className="text-5xl mb-6">¡basta!</h1>
+
+        <h2 className="text-2xl text-gray-500 mb-8">
           ¡El divertido juego de pensar palabras, traído del papel a la web!
         </h2>
-        <Card>
-          <Link to={'/' + room}>Nuevo juego</Link>
-          {' ó '}
-          <div className="border-2 border-black inline-block rounded-full">
-            <Input setter={setRoomId}>entrar en una sala</Input>
-            <Link to={'/' + roomId}>Unirme</Link>
-          </div>
-        </Card>
 
-        <h3 className="text-xl">Reglas:</h3>
+        <div className="">
+          <Link to={'/' + room} className="bg-blue-500 p-3 px-8 text-white rounded-full">
+            Nuevo juego
+          </Link>
+
+          <span className="font-medium text-xl mx-2">{' ó '}</span>
+
+          <div className="inline-block rounded-full py-0 relative">
+            <Input
+              setter={setRoomId}
+              inputClassName="py-0 pr-20 border-2 border-emerald-500"
+            >
+              entrar en una sala
+            </Input>
+            <Link
+              to={'/' + roomId}
+              className="bg-emerald-500 text-white py-2 px-8 rounded-full 
+              absolute top-3.5 border-3 border-emerald-500 right-0"
+            >
+              Unirme
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      <div className="w-4/5 text-gray-700">
+        <h3 className="text-3xl mb-3">Reglas:</h3>
 
         <ul>
           <li>Seleccionaremos una letra y 5 divertidas categorías</li>
-          <li>Cada jugador elige una palabra de cada categoria que empieze con esa letra</li>
           <li>
-            Cada jugador que elija una palabra que no hayan elegido los otros gana 100 puntos Si 2 o
-            más jugadores eligen la misma palabra, ambos ganan 50 puntos Si la palabra está mal
-            escrita o no existe, ganan 0 puntos
+            Cada jugador debe pensar una palabra de cada categoria que empieze con esa
+            letra
+          </li>
+          <li>
+            Cada jugador que elija una palabra que no hayan elegido los otros gana 100
+            puntos Si 2 o más jugadores eligen la misma palabra, ambos ganan 50 puntos Si
+            la palabra está mal escrita o no existe, ganan 0 puntos
           </li>
         </ul>
       </div>
-    </div>
+    </main>
   )
 }
