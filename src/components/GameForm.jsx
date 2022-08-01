@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from 'react'
 import CircleCard from './CircleCard'
 import Button from './Button'
 import Input from './Input'
+import SpinnerCard from './SpinnerCard'
 
 import socket from '../socket'
 
@@ -25,29 +26,43 @@ export default function GameForm() {
   const calcSpan = useCallback(i => (i + 1) % 3 || 'col-span-2', [])
 
   const sendAnswers = useCallback(() => {
-    confirmHasAnswered()
     socket.emit('player:sendanswers', { answers, roomId, authorId: id })
-  }, [answers, id])
-
-  useEffect(() => socket.on('countdown:count', ({ timeLeft: t }) => setTimeLeft(t)), [])
+    confirmHasAnswered()
+  }, [answers])
 
   useEffect(() => {
-    if (!hasAnswered && timeLeft === 1) sendAnswers()
-  }, [hasAnswered, timeLeft, sendAnswers])
+    socket.on('countdown:count', ({ timeLeft: t }) => setTimeLeft(t))
+  }, [])
+
+  useEffect(() => {
+    if (timeLeft === 1 && !hasAnswered) {
+      sendAnswers()
+    }
+  }, [sendAnswers, timeLeft, hasAnswered])
+
+  /**
+   * IMPORTANT need modify css and not the dom beacuse the auto-killing button explodes react
+   */
 
   return (
-    <CircleCard circleMessage={timeLeft < 20 ? timeLeft : letter}>
-      <form onSubmit={usePrevent()} className="grid grid-cols-2 gap-4 mt-12">
-        {categories.map((category, i) => (
-          <Input setter={setters[i]} className={`py-1 ${calcSpan(i)}`} key={i}>
-            {category}
-          </Input>
-        ))}
+    <div className="w-full">
+      <SpinnerCard className={hasAnswered ? '' : 'hidden'} message="Esperando las respuestas de los demás">
+        Respuestas en {timeLeft} segundos.
+      </SpinnerCard>
 
-        <Button onClick={sendAnswers} className="col-span-2" type="submit">
-          Enviar respuestas
-        </Button>
-      </form>
-    </CircleCard>
+      <CircleCard className={hasAnswered ? 'hidden' : ''} circleMessage={timeLeft < 20 ? timeLeft : letter}>
+        <form onSubmit={usePrevent()} className="grid grid-cols-2 gap-4 mt-12">
+          {categories.map((category, i) => (
+            <Input setter={setters[i]} className={`py-1 ${calcSpan(i)}`} key={i}>
+              {category}
+            </Input>
+          ))}
+
+          <Button onClick={sendAnswers} className="col-span-2" type="submit">
+            Enviar respuestas
+          </Button>
+        </form>
+      </CircleCard>
+    </div>
   )
 }

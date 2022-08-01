@@ -24,6 +24,10 @@ export default class Player {
     this.#socket.emit(event, payload)
   }
 
+  incrementScore(points: number) {
+    this.#score += points
+  }
+
   makeAdmin() {
     this.#isAdmin = true
     this.emit('player:becomeadmin', { id: this.publicToken })

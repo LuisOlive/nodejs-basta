@@ -1,9 +1,10 @@
-import { sample, findIndex, sampleSize, find } from 'lodash'
+import { sample, findIndex, sampleSize, find, keys, pickBy } from 'lodash'
 
 import Room, { GameStatus } from './Room'
 import type { AnswersRequest } from '../validators/answersSchema'
 
 import letterCategory from '../models/Category'
+import { connections } from 'mongoose'
 
 const letters = 'abcdefghijklmnopqrstuvwxyz'.split('')
 
@@ -19,7 +20,7 @@ interface Answer {
 interface Result {
   category: string
   answer: string
-  points: 0 | 50 | 100
+  points: 0 | 50 | 100 | -1
   authorId?: string
 }
 
@@ -49,9 +50,12 @@ export default class Round {
   }
 
   count() {
+    this.#timeLeft--
     this.room.emit('countdown:count', { timeLeft: this.#timeLeft })
 
-    if (!this.#timeLeft-- || !this.#pendingPlayers) this.finishTime()
+    if (!this.#timeLeft || !this.#pendingPlayers) {
+      this.finishTime()
+    }
   }
 
   evaluateKnownAnswers() {
@@ -60,8 +64,7 @@ export default class Round {
       if (j === -1) return
 
       if (this.#answers[j].used) {
-        this.#results[i].points = 50
-        return
+        return (this.#results[i].points = 50)
       }
 
       this.#results[i].points = 100
@@ -74,10 +77,23 @@ export default class Round {
    * @param evaluation the category and answer accepted by the admin
    */
   evaluateUnknownResult({ category, answer, points }: Result) {
-    const i = findIndex(this.#results, { category, answer })
-    if (i === -1) return
+    const indexes: number[] = []
 
-    this.#results[i].points = points
+    this.#results.forEach((r, i) => {
+      if (r.points === -1 && r.category === category && r.answer === answer) {
+        indexes.push(i)
+      }
+    })
+
+    indexes.forEach(i => {
+      this.#results[i].points = points
+
+      if (indexes.length > 1 && points) {
+        this.#results[i].points = 50
+      }
+    })
+
+    this.trySaveScores()
   }
 
   async getAnswersFromDb() {
@@ -113,7 +129,7 @@ export default class Round {
 
     this.room.emit('countdown:finish', {})
     this.room.status = GameStatus.waitingUnknownAnswersCheck
-    this.sendUnknownAnswers()
+    this.sendAdminUnknownAnswers()
   }
 
   savePlayerResults({ authorId, answers }: AnswersRequest) {
@@ -123,7 +139,7 @@ export default class Round {
       this.#results.push({
         authorId,
         answer: answers[i],
-        points: 0,
+        points: -1,
         category
       })
     })
@@ -131,13 +147,40 @@ export default class Round {
     this.#pendingPlayers--
   }
 
-  sendUnknownAnswers() {
-    this.room.admin?.emit('game:unknownanswers', this.unknownAnswers)
+  saveScores() {
+    this.#results.forEach(({ authorId, points }, i) => {
+      const player = this.room.findPlayer(authorId as string)
+      if (!player) return
+
+      /**
+       * in case of a tie, the decimals are hidden points
+       * to untie, the parameter is the time,
+       * and the lowest times are automatic from the array recollection
+       * at greatest times, division is lower and decimals are lower
+       */
+      player.incrementScore(points + 1 / (1e6 + i))
+    })
+
+    this.room.emit()
+  }
+
+  sendAdminUnknownAnswers() {
+    if (this.unknownAnswers) {
+      this.room.admin?.emit('game:unknownanswers', this.unknownAnswers)
+    }
   }
 
   tryStartCountDown() {
     if (this.#timeLeft === 21) {
       this.#timeleftInterval = setInterval(() => this.count(), 1000)
+    }
+  }
+
+  trySaveScores() {
+    this.sendAdminUnknownAnswers()
+
+    if (!this.unknownAnswers.length) {
+      this.saveScores()
     }
   }
 
@@ -147,6 +190,6 @@ export default class Round {
   }
 
   get unknownAnswers() {
-    return this.#results.filter(({ points, answer }) => !points && answer[0] === this.letter).map(r => ({ ...r, authorId: null }))
+    return this.#results.filter(({ points }) => points === -1).map(({ answer, category }) => ({ answer, category }))
   }
 }

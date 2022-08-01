@@ -148,7 +148,10 @@ export default class Room {
   get data() {
     return {
       ...this.preview,
-      players: this.#players.map(p => p.data),
+      players: sortBy(
+        this.#players.map(p => p.data),
+        'score'
+      ).map(p => ({ ...p, score: Math.floor(p.score) })),
       status: stringStatusOpts[this.#status] as string,
       round: this.#rounds.length
     }

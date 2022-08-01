@@ -36,11 +36,11 @@ export function listenGameAction() {
       dispatch(muts.setStatus(status))
       dispatch(muts.setResults(results))
     })
+
+    socket.on('game:unknownanswers', answers => dispatch(muts.fillUnknownAnswers(answers)))
   }
 }
 
 export function prepareIfNamedAdminAction() {
-  return dispatch => {
-    socket.on('game:unknownanswers', items => dispatch(muts.fillUnknownAnswers(items)))
-  }
+  return dispatch => {}
 }

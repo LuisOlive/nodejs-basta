@@ -5,7 +5,14 @@ import Round from './classes/Round'
 import { SocketSimulator } from './classes/InternalSocketIO'
 import guestSchema from './validators/guestSchema'
 import { Color } from './validators/playerSchema'
-import connect, { dotenv } from './connection'
+import connect from './connection'
+import eva from './validators/evaluationSchema'
+import chalk from 'chalk'
+
+async function main() {
+  const data = eva.parse({ category: 'países', answer: 'grfger', points: 0, roomId: 'acm1pt' })
+  console.log(data)
+}
 
 function simulate() {
   const io = new SocketSimulator('cyan', 'Basta')
@@ -71,6 +78,6 @@ function returnReference() {
 }
 
 // returnReference()
-connect().then(() => {
-  simulate()
-})
+connect()
+  .then(main)
+  .catch(x => console.error(chalk.red(x)))

@@ -2,11 +2,11 @@ import Card from './Card'
 
 import { useUser } from '../redux'
 
-export default function CircleCard({ children, circleMessage }) {
+export default function CircleCard({ children, circleMessage, className }) {
   const { color } = useUser()
 
   return (
-    <Card>
+    <Card className={className}>
       <div
         className={`
         bg-${color}-500

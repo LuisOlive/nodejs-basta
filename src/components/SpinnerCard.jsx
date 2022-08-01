@@ -1,11 +1,11 @@
 import { useUser } from '../redux'
 import Card from './Card'
 
-export default function SpinnerCard({ children, color, message }) {
+export default function SpinnerCard({ children, color, message, className }) {
   const trueColor = color ?? useUser().color
 
   return (
-    <Card>
+    <Card className={className}>
       <div className="flex justify-center mb-2">
         <div
           className={`w-12 h-12 
@@ -16,9 +16,7 @@ export default function SpinnerCard({ children, color, message }) {
         ></div>
       </div>
 
-      <p className={`text-center text-${trueColor}-600 text-xl font-semibold mb-8`}>
-        {message ?? 'Esperando'}...
-      </p>
+      <p className={`text-center text-${trueColor}-600 text-xl font-semibold mb-8`}>{message ?? 'Esperando'}...</p>
 
       {children ?? ''}
     </Card>
