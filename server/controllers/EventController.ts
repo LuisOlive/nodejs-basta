@@ -37,7 +37,6 @@ export default class EventController extends Logger {
   evaluate(ans: Evaluation, _: Socket) {
     const room = this.game.findRoom(ans.roomId)
     room?.round?.evaluateUnknownResult(ans)
-    room?.round?.trySaveScores()
   }
 
   /**

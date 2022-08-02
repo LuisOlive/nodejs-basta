@@ -32,12 +32,11 @@ export function listenGameAction() {
   return dispatch => {
     socket.on('game:start', round => dispatch(muts.setRound(round)))
 
-    socket.on('countdown:finish', ({ results, status }) => {
-      dispatch(muts.setStatus(status))
-      dispatch(muts.setResults(results))
-    })
-
     socket.on('game:unknownanswers', answers => dispatch(muts.fillUnknownAnswers(answers)))
+
+    socket.on('game:results', results => dispatch(muts.setResults(results)))
+
+    socket.on('echo', console.log)
   }
 }
 

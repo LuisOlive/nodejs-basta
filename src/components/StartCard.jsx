@@ -7,7 +7,7 @@ import InvitationLink from './InvitationLink'
 import { useGame, useUser } from '../redux'
 import socket from '../socket'
 
-export default function StartCard({ color }) {
+export default function StartCard({ color, hideMessage, className, children }) {
   const user = useUser()
   const { roomId } = useGame()
   const trueColor = user.color ?? color
@@ -15,14 +15,14 @@ export default function StartCard({ color }) {
   const askToStart = useCallback(() => socket.emit('admin:startgame', { roomId }), [])
 
   return (
-    <Card>
-      <p className={`text-center text-${trueColor}-600 text-xl font-semibold mb-4`}>
-        ¡Ya hay rivales en espera!
-      </p>
+    <Card className={className}>
+      {hideMessage || <p className={`text-center text-${trueColor}-600 text-xl font-semibold mb-4`}>¡Ya hay rivales en espera!</p>}
 
-      <Button className="mb-4" onClick={askToStart}>
-        Iniciar partida
-      </Button>
+      {user.status === 'ADMIN' && (
+        <Button className="mb-4" onClick={askToStart}>
+          {children ?? 'Iniciar partida'}
+        </Button>
+      )}
 
       <InvitationLink />
     </Card>

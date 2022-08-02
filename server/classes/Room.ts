@@ -1,6 +1,6 @@
 import type { InternalServer as Server } from './InternalSocketIO'
 
-import { find, pull, last, remove, orderBy, sortBy } from 'lodash'
+import { find, pull, last, remove, orderBy, sortBy, chain } from 'lodash'
 
 import Player, { PlayerParams } from './Player'
 import Round from './Round'
@@ -148,10 +148,11 @@ export default class Room {
   get data() {
     return {
       ...this.preview,
-      players: sortBy(
-        this.#players.map(p => p.data),
-        'score'
-      ).map(p => ({ ...p, score: Math.floor(p.score) })),
+      players: chain(this.#players)
+        .sortBy('score')
+        .map(({ data }) => ({ ...data, score: Math.floor(data.score) }))
+        .value()
+        .reverse(),
       status: stringStatusOpts[this.#status] as string,
       round: this.#rounds.length
     }

@@ -20,7 +20,7 @@ export default function UnknownAnswers({}) {
       {Object.entries(groupBy(unknownAnswers, 'category')).map(([category, answers]) =>
         answers ? (
           <div className={`bg-${color}-300 py-4 rounded-xl w-full mb-5`} key={category}>
-            <p className="text-lg pl-4">{category}</p>
+            <p className="text-lg text-center pl-4">{category}</p>
 
             <List items={answers}>
               {({ answer }, i) => (

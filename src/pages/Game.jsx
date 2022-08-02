@@ -8,6 +8,7 @@ import InvitationCard from '../components/InvitationCard'
 import StartCard from '../components/StartCard'
 import SpinnerCard from '../components/SpinnerCard'
 import GameForm from '../components/GameForm'
+import Results from '../components/Results'
 
 import { useGame, useUser } from '../redux'
 import * as userActions from '../redux/user/actions'
@@ -19,7 +20,7 @@ export default function Game() {
 
   const { roomId } = useParams()
   const { color, status: userStatus } = useUser()
-  const { status: gameStatus, round } = useGame()
+  const { status: gameStatus, round, results } = useGame()
 
   useEffect(() => {
     dispatch(gameActions.setRoomIdAction(roomId))
@@ -43,6 +44,8 @@ export default function Game() {
           /* using switch case for select components */
           switch (gameStatus) {
             case 'WAITING_PLAYERS':
+              if (results.length) return <Results />
+
               return <InvitationCard>Esperando jugadores</InvitationCard>
 
             case 'WAITING_ADMIN':

@@ -1,10 +1,9 @@
-import { sample, findIndex, sampleSize, find, keys, pickBy } from 'lodash'
+import { sample, findIndex, sampleSize, find, chain, map, filter, pick } from 'lodash'
 
 import Room, { GameStatus } from './Room'
 import type { AnswersRequest } from '../validators/answersSchema'
 
 import letterCategory from '../models/Category'
-import { connections } from 'mongoose'
 
 const letters = 'abcdefghijklmnopqrstuvwxyz'.split('')
 
@@ -158,10 +157,12 @@ export default class Round {
        * and the lowest times are automatic from the array recollection
        * at greatest times, division is lower and decimals are lower
        */
-      player.incrementScore(points + 1 / (1e6 + i))
+      player.incrementScore(points + 1 / (1e8 + i))
     })
 
+    this.room.status = GameStatus.waitingPlayers
     this.room.emit()
+    this.room.emit('game:results', this.results)
   }
 
   sendAdminUnknownAnswers() {
@@ -189,7 +190,15 @@ export default class Round {
     return { letter, categories }
   }
 
+  get results() {
+    return this.#results
+  }
+
   get unknownAnswers() {
-    return this.#results.filter(({ points }) => points === -1).map(({ answer, category }) => ({ answer, category }))
+    return chain(this.#results)
+      .filter(['points', -1])
+      .map(res => pick(res, ['category', 'answer']))
+      .sortBy('category')
+      .value()
   }
 }

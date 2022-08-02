@@ -4,7 +4,7 @@ import stringSchema from './stringSchema'
 
 const evaluationSchema = z
   .object({
-    answer: stringSchema,
+    answer: z.string(),
     points: z.number().multipleOf(50).min(0).max(100),
     category: z.string()
   })
