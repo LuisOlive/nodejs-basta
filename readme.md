@@ -34,15 +34,17 @@ Full stack (MERN) game project
 This code couldn't be possible without this recopilations
 
 - https://www.dodot.es/embarazo/nombres-de-bebes/articulo/nombres-de-ninos
-- https://www.tracemyip.org/tools/remove-duplicate-words-in-text/
+- https://www.tracemyip.org/tools/remove-duplicate-words-in-text
 - https://www.ejemplos.co/ejemplos-de-oficios-y-profesiones/#ixzz7J9jRAHX9
 - https://www.spanish.cl/Vocabulary/Notes/Profesiones_Oficios.htm
 - https://www.spanish.cl/vocabulario/frutas.htm
-- https://bolcereales.com.ar/alimentacion/lista-de-frutas/
-- https://frutas.consumer.es/
+- https://bolcereales.com.ar/alimentacion/lista-de-frutas
+- https://frutas.consumer.es
 - https://www.spanish.cl/vocabulario/verduras.htm
 - https://www.wikilengua.org/index.php/Lista_de_colores
-- https://animapedia.org/nombres-de-animales/
+- https://animapedia.org/nombres-de-animales
+- https://www.expertoanimal.com/animales-con-n-en-ingles-y-en-espanol-23211.html
+- http://www.revista.unam.mx/vol.2/num4/sabias1/tipos.html
 
 And they would be a headache to format without the help of:
 

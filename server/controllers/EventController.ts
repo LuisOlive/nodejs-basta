@@ -21,9 +21,6 @@ export default class EventController extends Logger {
   }
 
   main(socket: Socket) {
-    socket.onAny(console.log.bind(console))
-    this.logCyan('new user conected :D')
-
     socket.on('message', e => this.receiveMessage(e))
     socket.on('guest:enter', e => this.sendRoomPreview(e, socket))
     socket.on('player:enter', e => this.sendRoomData(e, socket))

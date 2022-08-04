@@ -43,7 +43,7 @@ export default class Game {
       return room as Room
     }
 
-    return this.addRoom(new Room(id))
+    return this.addRoom(new Room(this, id))
   }
 
   get data() {

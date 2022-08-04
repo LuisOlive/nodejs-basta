@@ -31,12 +31,12 @@ export default function Game() {
   }, [])
 
   return (
-    <div className={`bg-${color}-100 h-screen flex`}>
-      <aside className={`bg-${color}-00 w-1/4 px-0 py-16 h-screen`}>
+    <div className={`bg-${color}-100 h-full min-h-screen justify-around flex flex-col-reverse lg:flex-row`}>
+      <aside className={`w-11/12 md:w-1/2 lg:w-1/4 px-0 lg:pt-16 min-h-[12em] lg:h-screen`}>
         <Players />
       </aside>
 
-      <main className={`flex justify-center items-center w-3/4 h-screen`}>
+      <main className={`flex justify-center items-center lg:w-3/4 lg:h-screen`}>
         {(() => {
           //
           if (userStatus === 'UNSIGNED') return <PlayerForm />

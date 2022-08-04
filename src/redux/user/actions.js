@@ -32,6 +32,8 @@ export function loginAction() {
     } = getState()
 
     socket.emit('player:enter', { name, color, roomId })
+    localStorage.setItem('name', name)
+    localStorage.setItem('color', color)
   }
 }
 

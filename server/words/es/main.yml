@@ -1,0 +1,15 @@
+categories:
+  - singular: empleo
+    plural: empleos
+  - singular: fruto
+    plural: frutos
+  - singular: país
+    plural: países
+  - singular: animal
+    plural: animales
+  - singular: color
+    plural: colores
+  - singular: apellido
+    plural: apellidos
+  - singular: nombre
+    plural: nombres

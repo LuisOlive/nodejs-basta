@@ -1,9 +1,10 @@
 import type { InternalServer as Server } from './InternalSocketIO'
 
-import { find, pull, last, remove, orderBy, sortBy, chain } from 'lodash'
+import { find, last, remove, chain } from 'lodash'
 
 import Player, { PlayerParams } from './Player'
 import Round from './Round'
+import type Game from './Game'
 
 import { colors } from '../validators/playerSchema'
 
@@ -49,7 +50,7 @@ export default class Room {
   }
 
   close() {
-    console.log(`room ${this.#id} should be closed`)
+    this.game.deleteRoom(this.#id)
   }
 
   /**
@@ -131,7 +132,7 @@ export default class Room {
     if (!this.admin) this.#players[0].makeAdmin()
   }
 
-  constructor(id: string) {
+  constructor(public game: Game, id: string) {
     this.#id = id
   }
 

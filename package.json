@@ -6,6 +6,7 @@
     "backend": "npx nodemon server/index.ts",
     "simulation": "npx nodemon server/test.ts",
     "seeder": "npx ts-node server/seeder.ts",
+    "seed": "npx ts-node server/seeder.ts",
     "build": "vite build",
     "preview": "vite preview",
     "tw": "npx tailwindcss -o src/tailwind.css"
@@ -39,9 +40,11 @@
     "zod": "^3.17.3"
   },
   "devDependencies": {
+    "@types/js-yaml": "^4.0.5",
     "@types/lodash": "^4.14.178",
     "@types/mongoose": "^5.11.97",
     "@vitejs/plugin-react": "^1.0.7",
+    "js-yaml": "^4.1.0",
     "nodemon": "^2.0.18",
     "ts-node": "^10.8.2",
     "typescript": "^4.7.4",

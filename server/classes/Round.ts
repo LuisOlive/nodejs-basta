@@ -1,13 +1,11 @@
-import { sample, findIndex, sampleSize, find, chain, map, filter, pick } from 'lodash'
+import { sample, sampleSize, find, chain, pick } from 'lodash'
 
 import Room, { GameStatus } from './Room'
 import type { AnswersRequest } from '../validators/answersSchema'
-
 import letterCategory from '../models/Category'
+import categories from '../data/categories'
 
 const letters = 'abcdefghijklmnopqrstuvwxyz'.split('')
-
-export const categories = ['empleos', 'frutos', 'países', 'animales', 'colores', 'apellidos', 'nombres']
 
 /** answer belongs to db */
 interface Answer {
@@ -32,10 +30,10 @@ interface DbAnswer {
 export default class Round {
   readonly categories = sampleSize(categories, 5)
   readonly letter = sample(letters) as string
-  // full list of answers gotten from db, with 100 or 50 points
+  /** full list of answers gotten from db, with 100 or 50 points */
   #answers: Answer[] = []
   #timeLeft = 21
-  // answers from the users
+  /** answers from the users */
   #results: Result[]
   #timeleftInterval: NodeJS.Timer
   #pendingPlayers: number
@@ -58,16 +56,17 @@ export default class Round {
   }
 
   evaluateKnownAnswers() {
-    this.#results.forEach(({ answer }, i) => {
-      const j = findIndex(this.#answers, ({ regex }) => regex.test(answer))
-      if (j === -1) return
+    this.#results.forEach(({ answer, category, points }) => {
+      const test = ({ regex, category: c }) => category === c && regex.test(answer)
 
-      if (this.#answers[j].used) {
-        return (this.#results[i].points = 50)
+      // if the answer is empty, dont waste more time
+      if (answer === '') {
+        points = 0
+      } else if (find(this.#answers, test)) {
+        points = 100
       }
 
-      this.#results[i].points = 100
-      this.#answers[j].used = true
+      this.evaluateUnknownResult({ answer, category, points })
     })
   }
 
@@ -79,6 +78,7 @@ export default class Round {
     const indexes: number[] = []
 
     this.#results.forEach((r, i) => {
+      // if not evaluated && same category && same answer
       if (r.points === -1 && r.category === category && r.answer === answer) {
         indexes.push(i)
       }
@@ -116,7 +116,7 @@ export default class Round {
       ;(answers ?? words ?? []).forEach(ans => {
         this.#answers.push({
           category,
-          regex: new RegExp(`^${ans}( .+)?$`, 'gi'),
+          regex: new RegExp(`^((el|la|los|the|mi|un(a|os)?)\\s)?${ans}(\\s.+)?$`, 'gi'),
           used: false
         })
       })
@@ -127,6 +127,7 @@ export default class Round {
     clearInterval(this.#timeleftInterval)
 
     this.room.emit('countdown:finish', {})
+    this.evaluateKnownAnswers()
     this.room.status = GameStatus.waitingUnknownAnswersCheck
     this.sendAdminUnknownAnswers()
   }
