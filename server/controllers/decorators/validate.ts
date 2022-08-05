@@ -1,5 +1,4 @@
-import chalk from 'chalk'
-import type { SafeParseError, Schema } from 'zod'
+import type { Schema } from 'zod'
 import type { Socket } from 'socket.io'
 
 export default function validate(validator: Schema) {
@@ -20,26 +19,8 @@ export default function validate(validator: Schema) {
         socket?.emit?.('validation:error', safeEvent.error)
         //
       } else {
-        console.error(chalk.red(safeEvent.error.toString()))
+        console.error(safeEvent.error.toString())
       }
-    }
-
-    return descriptor
-  }
-}
-
-export function log(color: string) {
-  return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
-    const originalValue = descriptor.value
-
-    descriptor.value = function (...args: any[]) {
-      const result = originalValue.apply(this, args)
-
-      console.log(
-        chalk[color](`function ${propertyKey} called w/ args ${args}, returned ${result}`)
-      )
-
-      return result
     }
 
     return descriptor
