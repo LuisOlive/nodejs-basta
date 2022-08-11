@@ -1,4 +1,4 @@
-import { sample, sampleSize, find, chain, pick } from 'lodash'
+import { sample, sampleSize, find, chain, pick, zipObject } from 'lodash'
 
 import Room, { GameStatus } from './Room'
 import type { AnswersRequest } from '../validators/answersSchema'
@@ -34,23 +34,19 @@ export default class Round {
   #answers: Answer[] = []
   #timeLeft = 21
   /** answers from the users */
-  #results: Result[]
+  #results: Result[] = []
   #timeleftInterval: NodeJS.Timer
-  #pendingPlayers: number
+  #playersWichHasAnswered = 0
 
   constructor(readonly room: Room) {
     this.getAnswersFromDb().catch(console.error)
-
-    this.#results = []
-
-    this.#pendingPlayers = room.data.players.length
   }
 
   count() {
     this.#timeLeft--
     this.room.emit('countdown:count', { timeLeft: this.#timeLeft })
 
-    if (!this.#timeLeft || !this.#pendingPlayers) {
+    if (this.#timeLeft <= 0 || this.pendingPlayers <= 0) {
       this.finishTime()
     }
   }
@@ -64,6 +60,8 @@ export default class Round {
         points = 0
       } else if (find(this.#answers, test)) {
         points = 100
+      } else {
+        points = -1
       }
 
       this.evaluateUnknownResult({ answer, category, points })
@@ -78,8 +76,7 @@ export default class Round {
     const indexes: number[] = []
 
     this.#results.forEach((r, i) => {
-      // if not evaluated && same category && same answer
-      if (r.points === -1 && r.category === category && r.answer === answer) {
+      if (r.category === category && r.answer === answer) {
         indexes.push(i)
       }
     })
@@ -87,7 +84,7 @@ export default class Round {
     indexes.forEach(i => {
       this.#results[i].points = points
 
-      if (indexes.length > 1 && points) {
+      if (indexes.length > 1 && points > 0) {
         this.#results[i].points = 50
       }
     })
@@ -125,26 +122,20 @@ export default class Round {
 
   finishTime() {
     clearInterval(this.#timeleftInterval)
-
     this.room.emit('countdown:finish', {})
     this.evaluateKnownAnswers()
     this.room.status = GameStatus.waitingUnknownAnswersCheck
     this.sendAdminUnknownAnswers()
   }
 
-  savePlayerResults({ authorId, answers }: AnswersRequest) {
+  savePlayerResults({ authorId, answers }: AnswersRequest & { authorId: string }) {
     if (!this.room.findPlayer(authorId) || find(this.#results, { authorId })) return
 
-    this.categories.forEach((category, i) => {
-      this.#results.push({
-        authorId,
-        answer: answers[i],
-        points: -1,
-        category
-      })
+    answers.forEach(([category, answer]) => {
+      this.#results.push({ authorId, answer, points: -1, category })
     })
 
-    this.#pendingPlayers--
+    this.#playersWichHasAnswered++
   }
 
   saveScores() {
@@ -159,6 +150,12 @@ export default class Round {
        * at greatest times, division is lower and decimals are lower
        */
       player.incrementScore(points + 1 / (1e8 + i))
+
+      /**
+       * before send results to all players, we change the id gotten
+       * from socket to the public id from each one
+       */
+      this.#results[i].authorId = player.publicToken
     })
 
     this.room.status = GameStatus.waitingPlayers
@@ -167,13 +164,14 @@ export default class Round {
   }
 
   sendAdminUnknownAnswers() {
-    if (this.unknownAnswers) {
+    if (this.unknownAnswers.length > 0) {
       this.room.admin?.emit('game:unknownanswers', this.unknownAnswers)
     }
   }
 
   tryStartCountDown() {
-    if (this.#timeLeft === 21) {
+    if (this.#timeLeft === 21 && !this.#timeleftInterval) {
+      this.count() // to discard second count inmediatly
       this.#timeleftInterval = setInterval(() => this.count(), 1000)
     }
   }
@@ -201,5 +199,9 @@ export default class Round {
       .map(res => pick(res, ['category', 'answer']))
       .sortBy('category')
       .value()
+  }
+
+  get pendingPlayers() {
+    return this.room.data.players.length - this.#playersWichHasAnswered
   }
 }

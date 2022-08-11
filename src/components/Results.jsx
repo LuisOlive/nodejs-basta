@@ -3,6 +3,7 @@ import { groupBy, sortBy, find } from 'lodash'
 import List from './List'
 import StartCard from './StartCard'
 import { useGame, useUser } from '../redux'
+import { colors } from '../data/colors.json'
 
 export default function Results({}) {
   const { results, players } = useGame()
@@ -16,8 +17,8 @@ export default function Results({}) {
             <p className="text-lg text-center pl-4">{category}</p>
 
             <List items={sortBy(answers, 'points').reverse()}>
-              {({ answer, points, authorId: id }) => {
-                const { name, color } = find(players, { id })
+              {({ answer, points, authorId: id }, i) => {
+                const { name, color } = find(players, { id }) ?? { name: id, color: colors[i % 16] }
 
                 return (
                   <div className={`bg-${color}-500 py-2 px-4 text-white flex justify-between`}>

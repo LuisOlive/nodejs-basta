@@ -1,17 +1,18 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 /**
- * @returns {'visible' | 'hidden'}
- * @deprecated ultra-deplrecated, never never never use this
- * */
-export default function useVisibility() {
-  const [value, setValue] = useState('visible')
-
+ * watch document visibility state,
+ * on change, it calls calback cb with a param true if document i visible and false else
+ *
+ * @param {(isVisible: boolean) => void} cb the callback to call every change
+ * @param {any[]} deps dependencies to useEffect
+ */
+export default function useVisibility(cb, deps) {
   useEffect(() => {
-    document.addEventListener('visibilitychange', () => {
-      setValue(document.visibilityState)
-    })
-  }, [])
+    const main = () => cb(document.visibilityState === 'visible')
 
-  return value
+    document.addEventListener('visibilitychange', main)
+
+    return () => document.removeEventListener('visibilitychange', main)
+  }, deps)
 }

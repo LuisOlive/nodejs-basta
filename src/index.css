@@ -12,6 +12,11 @@
   animation: sk-scaleout 1s infinite ease-in-out;
 }
 
+editor-squiggler,
+editor-card {
+  display: none;
+}
+
 @keyframes sk-scaleout {
   0% {
     transform: scale(0);

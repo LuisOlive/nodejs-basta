@@ -1,18 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, memo } from 'react'
 
-export default function Input({
-  setter,
-  className,
-  placeholder,
-  children,
-  validator,
-  inputClassName
-}) {
+export default memo(function Input({ setter, className, placeholder, children, validator, inputClassName, name }) {
   const [errorMessage, setErrorMessage] = useState('')
-  const [value, setValue] = useState('')
   const [firstTime, setFirstTime] = useState(true)
 
-  useEffect(() => {
+  console.log('Input created')
+
+  const validateAndSend = value => {
     if (!validator) {
       setter(value)
       return
@@ -26,21 +20,22 @@ export default function Input({
       setErrorMessage(error)
       setter('')
     }
-  }, [value])
+  }
 
   return (
     <label className={`py-3 inline-block ${className}`}>
       <input
-        className={'rounded-full px-4 py-2 w-full inline-block ' + inputClassName}
+        className={`rounded-full px-4 py-2 w-full inline-block ${inputClassName}`}
         placeholder={placeholder ?? children ?? ''}
-        onChange={e => {
-          setValue(e.target.value)
+        onBlur={e => {
+          validateAndSend(e.target.value)
           setFirstTime(false)
         }}
         type="text"
+        name={name}
       />
 
       {!firstTime && errorMessage ? <p className="text-red-500">{errorMessage}</p> : ''}
     </label>
   )
-}
+})

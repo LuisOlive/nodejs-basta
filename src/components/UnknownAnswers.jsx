@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import {} from 'react'
 import { groupBy } from 'lodash'
 
 import { colors } from '../data/colors.json'
@@ -11,7 +11,7 @@ export default function UnknownAnswers({}) {
   const { unknownAnswers, roomId } = useGame()
   const { color } = useUser()
 
-  const evaluate = useCallback(payload => () => socket.emit('admin:evaluateword', { ...payload, roomId }), [])
+  const evaluate = payload => () => socket.emit('admin:evaluateword', { ...payload, roomId })
 
   return (
     <div className="w-11/12 lg:w-4/5 lg:h-[75vh] lg:overflow-y-auto">

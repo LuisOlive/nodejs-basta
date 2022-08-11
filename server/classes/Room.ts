@@ -79,7 +79,8 @@ export default class Room {
     if (length === 0) this.#status = GameStatus.empty
     if (length === 1) this.#status = GameStatus.waitingPlayers
 
-    if (this.#status === GameStatus.playing) return
+    if ([GameStatus.playing, GameStatus.waitingUnknownAnswersCheck].includes(this.#status)) return
+
     if (length >= 2) this.#status = GameStatus.waitingAdminToStart
   }
 
@@ -149,11 +150,7 @@ export default class Room {
   get data() {
     return {
       ...this.preview,
-      players: chain(this.#players)
-        .sortBy('score')
-        .map(({ data }) => ({ ...data, score: Math.floor(data.score) }))
-        .value()
-        .reverse(),
+
       status: stringStatusOpts[this.#status] as string,
       round: this.#rounds.length
     }
@@ -174,7 +171,11 @@ export default class Room {
     return {
       availableColors: this.#availableColors,
       id: this.#id,
-      players: this.#players.map(p => p.data),
+      players: chain(this.#players)
+        .sortBy('score')
+        .map(({ data }) => ({ ...data, score: Math.floor(data.score) }))
+        .value()
+        .reverse(),
       status: this.#status
     }
   }

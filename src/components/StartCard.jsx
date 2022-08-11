@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import {} from 'react'
 
 import Card from './Card'
 import Button from './Button'
@@ -12,7 +12,7 @@ export default function StartCard({ color, hideMessage, className, children }) {
   const { roomId } = useGame()
   const trueColor = user.color ?? color
 
-  const askToStart = useCallback(() => socket.emit('admin:startgame', { roomId }), [])
+  const askToStart = () => socket.emit('admin:startgame', { roomId })
 
   return (
     <Card className={className}>

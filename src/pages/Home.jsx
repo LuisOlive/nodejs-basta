@@ -27,7 +27,7 @@ export default function App() {
           <p className="font-medium text-xl mx-2">ó</p>
 
           <div className="inline-block rounded-full py-0 relative w-5/6 md:w-auto">
-            <Input setter={setRoomId} inputClassName="py-0 pr-20 border-2 border-emerald-500">
+            <Input setter={setRoomId} inputClassName="pr-20 border-2 border-emerald-500">
               entrar en una sala
             </Input>
             <Link

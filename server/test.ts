@@ -18,7 +18,7 @@ function simulate() {
   const io = new SocketSimulator('cyan', 'Basta')
   const game = new Game(io)
   // create room by definition
-  const room1 = game.addRoom(new Room('bnkxcs'))
+  const room1 = game.addRoom(new Room(game, 'bnkxcs'))
   // create rrom only with id
   game.findOrCreateRoom('w1nd0W')
   // do nothing cause room its created

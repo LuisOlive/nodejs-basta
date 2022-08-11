@@ -5,3 +5,6 @@ dist-ssr
 dist-server
 *.local
 **/.env
+.env.development
+.env.production
+nodejs-basta

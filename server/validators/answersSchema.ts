@@ -3,8 +3,7 @@ import roomIdSchema from './roomIdSchema'
 
 const answerSchema = z
   .object({
-    answers: z.string().array(),
-    authorId: z.string().length(4)
+    answers: z.string().array().length(2).array().length(5)
   })
   .and(roomIdSchema)
 
